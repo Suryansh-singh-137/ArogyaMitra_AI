@@ -1,8 +1,12 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import router from "next/dist/shared/lib/router/router";
+import { useState, useEffect, useRef, RefObject } from "react";
 
-const useInView = (threshold = 0.15) => {
-  const ref = useRef(null);
+/* ─── hooks ─────────────────────────────────────────────────────────────── */
+const useInView = (
+  threshold = 0.15,
+): [RefObject<HTMLDivElement | null>, boolean] => {
+  const ref = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -17,6 +21,7 @@ const useInView = (threshold = 0.15) => {
   return [ref, inView];
 };
 
+/* ─── illustrations ──────────────────────────────────────────────────────── */
 const DoctorIllustration = () => (
   <svg
     viewBox="0 0 320 380"
@@ -24,17 +29,12 @@ const DoctorIllustration = () => (
     xmlns="http://www.w3.org/2000/svg"
     style={{ width: "100%", maxWidth: 320 }}
   >
-    {/* Background circle */}
     <circle cx="160" cy="200" r="150" fill="#e8d5c4" opacity="0.35" />
-    {/* Body */}
     <ellipse cx="160" cy="290" rx="62" ry="75" fill="#85325c" />
-    {/* White coat */}
     <ellipse cx="160" cy="295" rx="58" ry="70" fill="#f5ede0" />
     <rect x="130" y="240" width="60" height="120" rx="8" fill="#f5ede0" />
-    {/* Coat lapels */}
     <path d="M160 250 L140 230 L138 280 Z" fill="#85325c" opacity="0.15" />
     <path d="M160 250 L180 230 L182 280 Z" fill="#85325c" opacity="0.15" />
-    {/* Stethoscope */}
     <path
       d="M145 265 Q130 280 132 298 Q134 318 148 318 Q162 318 162 305 Q162 295 155 292"
       stroke="#85325c"
@@ -44,17 +44,13 @@ const DoctorIllustration = () => (
     />
     <circle cx="155" cy="290" r="7" fill="#85325c" />
     <circle cx="155" cy="290" r="4" fill="#f0eada" />
-    {/* Neck */}
     <rect x="148" y="168" width="24" height="32" rx="10" fill="#d4956a" />
-    {/* Head */}
     <ellipse cx="160" cy="150" rx="46" ry="52" fill="#e8a87c" />
-    {/* Hair */}
     <ellipse cx="160" cy="108" rx="46" ry="28" fill="#3d1a0e" />
     <path
       d="M114 120 Q108 100 120 88 Q140 72 160 72 Q180 72 200 88 Q212 100 206 120"
       fill="#3d1a0e"
     />
-    {/* Bun */}
     <circle cx="160" cy="82" r="18" fill="#3d1a0e" />
     <path
       d="M148 76 Q160 68 172 76"
@@ -62,14 +58,12 @@ const DoctorIllustration = () => (
       strokeWidth="2"
       fill="none"
     />
-    {/* Face - eyes */}
     <ellipse cx="147" cy="148" rx="6" ry="7" fill="white" />
     <ellipse cx="173" cy="148" rx="6" ry="7" fill="white" />
     <circle cx="148" cy="149" r="4" fill="#2d1810" />
     <circle cx="174" cy="149" r="4" fill="#2d1810" />
     <circle cx="150" cy="147" r="1.5" fill="white" />
     <circle cx="176" cy="147" r="1.5" fill="white" />
-    {/* Eyebrows */}
     <path
       d="M141 139 Q148 135 155 138"
       stroke="#3d1a0e"
@@ -84,7 +78,6 @@ const DoctorIllustration = () => (
       fill="none"
       strokeLinecap="round"
     />
-    {/* Nose */}
     <path
       d="M158 155 Q156 165 158 168 Q162 170 166 168 Q168 165 162 155"
       fill="none"
@@ -92,7 +85,6 @@ const DoctorIllustration = () => (
       strokeWidth="1.5"
       strokeLinecap="round"
     />
-    {/* Smile */}
     <path
       d="M148 174 Q160 184 172 174"
       stroke="#c4845a"
@@ -100,10 +92,8 @@ const DoctorIllustration = () => (
       fill="none"
       strokeLinecap="round"
     />
-    {/* Cheeks */}
     <ellipse cx="138" cy="168" rx="10" ry="6" fill="#e88c6a" opacity="0.4" />
     <ellipse cx="182" cy="168" rx="10" ry="6" fill="#e88c6a" opacity="0.4" />
-    {/* Clipboard */}
     <rect
       x="178"
       y="260"
@@ -142,7 +132,6 @@ const DoctorIllustration = () => (
       opacity="0.4"
     />
     <rect x="192" y="255" width="12" height="8" rx="3" fill="#85325c" />
-    {/* Arms */}
     <path
       d="M102 260 Q88 280 92 305 Q96 320 108 318"
       stroke="#f5ede0"
@@ -159,7 +148,6 @@ const DoctorIllustration = () => (
     />
     <ellipse cx="96" cy="314" rx="14" ry="10" fill="#d4956a" />
     <ellipse cx="218" cy="316" rx="14" ry="10" fill="#d4956a" />
-    {/* Floating hearts */}
     <path
       d="M52 180 Q52 173 58 173 Q64 173 64 180 Q64 187 52 195 Q40 187 40 180 Q40 173 46 173 Q52 173 52 180Z"
       fill="#85325c"
@@ -176,7 +164,6 @@ const DoctorIllustration = () => (
       fill="#85325c"
       opacity="0.15"
     />
-    {/* Stars / sparkles */}
     <path
       d="M240 160 L242 155 L244 160 L249 162 L244 164 L242 169 L240 164 L235 162Z"
       fill="#85325c"
@@ -198,10 +185,8 @@ const VillagerIllustration = () => (
     style={{ width: "100%", maxWidth: 180 }}
   >
     <circle cx="100" cy="120" r="90" fill="#d4b896" opacity="0.2" />
-    {/* Body - kurta */}
     <ellipse cx="100" cy="175" rx="42" ry="45" fill="#c9956a" opacity="0.85" />
     <rect x="62" y="145" width="76" height="75" rx="6" fill="#b8845a" />
-    {/* Kurta pattern */}
     <path
       d="M85 155 L85 195"
       stroke="#f0eada"
@@ -220,11 +205,8 @@ const VillagerIllustration = () => (
       strokeWidth="1.5"
       opacity="0.4"
     />
-    {/* Neck */}
     <rect x="90" y="110" width="20" height="26" rx="8" fill="#d4956a" />
-    {/* Head */}
     <ellipse cx="100" cy="92" rx="36" ry="38" fill="#c8845a" />
-    {/* Turban */}
     <ellipse cx="100" cy="60" rx="38" ry="20" fill="#85325c" />
     <path
       d="M62 62 Q100 42 138 62 Q138 58 100 50 Q62 58 62 62Z"
@@ -235,9 +217,7 @@ const VillagerIllustration = () => (
       fill="#9e3d6e"
       opacity="0.5"
     />
-    {/* Turban fold */}
     <ellipse cx="100" cy="56" rx="12" ry="8" fill="#9e3d6e" />
-    {/* Face */}
     <ellipse cx="86" cy="90" rx="5" ry="6" fill="white" />
     <ellipse cx="114" cy="90" rx="5" ry="6" fill="white" />
     <circle cx="87" cy="91" r="3.5" fill="#2d1810" />
@@ -267,9 +247,7 @@ const VillagerIllustration = () => (
     />
     <ellipse cx="80" cy="100" rx="8" ry="5" fill="#e07a5a" opacity="0.35" />
     <ellipse cx="120" cy="100" rx="8" ry="5" fill="#e07a5a" opacity="0.35" />
-    {/* Moustache */}
     <path d="M90 97 Q100 101 110 97" fill="#3d1a0e" opacity="0.6" />
-    {/* Phone in hand */}
     <rect x="130" y="155" width="22" height="36" rx="4" fill="#2d1810" />
     <rect
       x="132"
@@ -289,7 +267,6 @@ const VillagerIllustration = () => (
       fill="#f0eada"
       opacity="0.8"
     />
-    {/* Screen content suggestion */}
     <rect
       x="136"
       y="163"
@@ -330,10 +307,8 @@ const PhoneIllustration = () => (
     <rect x="30" y="20" width="140" height="260" rx="24" fill="#85325c" />
     <rect x="34" y="24" width="132" height="252" rx="21" fill="#2d0f1e" />
     <rect x="40" y="40" width="120" height="220" rx="10" fill="#f0eada" />
-    {/* Status bar */}
     <rect x="40" y="40" width="120" height="20" rx="10" fill="#85325c" />
     <circle cx="100" cy="30" r="6" fill="#1a0810" />
-    {/* App header */}
     <rect x="40" y="60" width="120" height="36" fill="#85325c" />
     <circle cx="58" cy="78" r="10" fill="#f0eada" opacity="0.3" />
     <rect x="74" y="72" width="60" height="5" rx="2" fill="#f0eada" />
@@ -346,7 +321,6 @@ const PhoneIllustration = () => (
       fill="#f0eada"
       opacity="0.6"
     />
-    {/* Language pills */}
     <rect x="46" y="103" width="30" height="14" rx="7" fill="#85325c" />
     <rect x="80" y="103" width="30" height="14" rx="7" fill="#e8d5c4" />
     <rect x="114" y="103" width="30" height="14" rx="7" fill="#e8d5c4" />
@@ -359,7 +333,6 @@ const PhoneIllustration = () => (
       fill="#f0eada"
       opacity="0.9"
     />
-    {/* Symptom chips */}
     <rect
       x="46"
       y="125"
@@ -456,7 +429,6 @@ const PhoneIllustration = () => (
       fill="#85325c"
       opacity="0.7"
     />
-    {/* CTA button */}
     <rect x="46" y="198" width="110" height="34" rx="10" fill="#85325c" />
     <rect
       x="68"
@@ -467,12 +439,10 @@ const PhoneIllustration = () => (
       fill="#f0eada"
       opacity="0.9"
     />
-    {/* Bottom nav */}
     <rect x="40" y="240" width="120" height="20" fill="#f5f0e8" />
     <circle cx="70" cy="250" r="5" fill="#85325c" opacity="0.6" />
     <circle cx="100" cy="250" r="5" fill="#85325c" opacity="0.3" />
     <circle cx="130" cy="250" r="5" fill="#85325c" opacity="0.3" />
-    {/* Home indicator */}
     <rect
       x="75"
       y="272"
@@ -485,44 +455,14 @@ const PhoneIllustration = () => (
   </svg>
 );
 
-const StatCard = ({ number, label, delay }) => {
-  const [ref, inView] = useInView();
-  return (
-    <div
-      ref={ref}
-      style={{
-        textAlign: "center",
-        opacity: inView ? 1 : 0,
-        transform: inView ? "translateY(0)" : "translateY(24px)",
-        transition: `all 0.6s ease ${delay}s`,
-      }}
-    >
-      <div
-        style={{
-          fontSize: "clamp(2rem,5vw,3.2rem)",
-          fontWeight: 700,
-          color: "#85325c",
-          fontFamily: "'Playfair Display',serif",
-          lineHeight: 1,
-        }}
-      >
-        {number}
-      </div>
-      <div
-        style={{
-          fontSize: "0.9rem",
-          color: "#8a6a5a",
-          marginTop: 6,
-          lineHeight: 1.4,
-        }}
-      >
-        {label}
-      </div>
-    </div>
-  );
-};
-
-const FeatureCard = ({ icon, title, desc, delay }) => {
+/* ─── sub-components ─────────────────────────────────────────────────────── */
+interface FeatureCardProps {
+  icon: string;
+  title: string;
+  desc: string;
+  delay: number;
+}
+const FeatureCard = ({ icon, title, desc, delay }: FeatureCardProps) => {
   const [ref, inView] = useInView();
   return (
     <div
@@ -557,7 +497,7 @@ const FeatureCard = ({ icon, title, desc, delay }) => {
           fontSize: "1.1rem",
           fontWeight: 600,
           color: "#3d1a2e",
-          fontFamily: "'Playfair Display',serif",
+          fontFamily: "var(--font-playfair)",
           marginBottom: "0.6rem",
         }}
       >
@@ -570,7 +510,13 @@ const FeatureCard = ({ icon, title, desc, delay }) => {
   );
 };
 
-const HowStep = ({ num, title, desc, delay }) => {
+interface HowStepProps {
+  num: string;
+  title: string;
+  desc: string;
+  delay: number;
+}
+const HowStep = ({ num, title, desc, delay }: HowStepProps) => {
   const [ref, inView] = useInView();
   return (
     <div
@@ -597,7 +543,7 @@ const HowStep = ({ num, title, desc, delay }) => {
           fontSize: "1.1rem",
           fontWeight: 700,
           flexShrink: 0,
-          fontFamily: "'Playfair Display',serif",
+          fontFamily: "var(--font-playfair)",
         }}
       >
         {num}
@@ -623,44 +569,109 @@ const HowStep = ({ num, title, desc, delay }) => {
   );
 };
 
+/* ─── main page ──────────────────────────────────────────────────────────── */
 export default function LandingPage() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [heroRef, heroInView] = useInView(0.05);
+  const [, setMenuOpen] = useState(false);
   const [statsRef, statsInView] = useInView();
+
+  const languages = ["हिंदी", "বাংলা", "தமிழ்", "తెలుగు", "मराठी", "ਪੰਜਾਬੀ"];
+
+  const features: FeatureCardProps[] = [
+    {
+      delay: 0,
+      icon: "🔊",
+      title: "Voice symptom input",
+      desc: "Speak your symptoms in Hindi or any regional language — no typing needed. Designed for low-literacy users.",
+    },
+    {
+      delay: 0.1,
+      icon: "🩺",
+      title: "AI diagnosis",
+      desc: "Get an instant assessment — mild, moderate, or urgent — with plain-language explanations you can actually understand.",
+    },
+    {
+      delay: 0.2,
+      icon: "💊",
+      title: "OTC medicine guide",
+      desc: "Safe over-the-counter medicines from your nearest Jan Aushadhi store, with dosage in Hindi. Always under ₹30.",
+    },
+    {
+      delay: 0.3,
+      icon: "📋",
+      title: "Report analyser",
+      desc: "Click a photo of your blood report or prescription. Get a clear explanation in simple Hindi within seconds.",
+    },
+    {
+      delay: 0.4,
+      icon: "📍",
+      title: "Nearest hospital",
+      desc: "GPS-based search finds your nearest PHC, government hospital, or clinic — with distance, hours, and directions.",
+    },
+    {
+      delay: 0.5,
+      icon: "📵",
+      title: "Works offline",
+      desc: "No internet? No problem. 80+ common conditions are bundled locally. Works on 2G and in remote villages.",
+    },
+  ];
+
+  const stats = [
+    { number: "108M+", label: "Indians far from a hospital" },
+    { number: "22+", label: "Indian languages supported" },
+    { number: "80+", label: "Common conditions covered offline" },
+    { number: "Free", label: "Always free for rural users" },
+  ];
+
+  const impactCards = [
+    {
+      n: "1 in 3",
+      l: "rural Indians can't read",
+      sub: "Voice-first solves this",
+    },
+    { n: "40km", l: "avg. distance to hospital", sub: "in rural Bihar & UP" },
+    { n: "₹0", l: "cost to use Sehat AI", sub: "Free, always" },
+    { n: "30 sec", l: "to get a diagnosis", sub: "vs 3hr clinic wait" },
+  ];
 
   return (
     <div
       style={{
-        fontFamily: "'DM Sans',sans-serif",
+        fontFamily: "var(--font-montserrat)",
         background: "#f0eada",
         minHeight: "100vh",
         overflowX: "hidden",
       }}
     >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=DM+Sans:wght@300;400;500&display=swap');
-        *{box-sizing:border-box;margin:0;padding:0;}
-        html{scroll-behavior:smooth;}
-        ::selection{background:#85325c;color:#f0eada;}
-        .nav-link{color:#3d1a2e;text-decoration:none;font-size:0.9rem;font-weight:500;opacity:0.75;transition:opacity 0.2s;}
-        .nav-link:hover{opacity:1;}
-        .btn-primary{background:#85325c;color:#f0eada;border:none;borderRadius:50px;padding:0.875rem 2rem;fontSize:0.95rem;fontWeight:500;cursor:pointer;transition:all 0.25s;display:inline-block;textDecoration:none;}
-        .btn-primary:hover{background:#6e2249;transform:translateY(-2px);}
-        .btn-outline{background:transparent;color:#85325c;border:1.5px solid #85325c;borderRadius:50px;padding:0.8rem 1.8rem;fontSize:0.9rem;fontWeight:500;cursor:pointer;transition:all 0.25s;}
-        .btn-outline:hover{background:#85325c;color:#f0eada;}
-        .lang-tag{display:inline-block;padding:4px 12px;borderRadius:20px;fontSize:0.8rem;fontWeight:500;}
-        .dot-pattern{backgroundImage:radial-gradient(#85325c18 1.5px,transparent 1.5px);backgroundSize:24px 24px;}
-        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-        @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-        .float{animation:float 4s ease-in-out infinite;}
-        .hero-text{animation:fadeUp 0.8s ease both;}
-        .hero-text-2{animation:fadeUp 0.8s ease 0.15s both;}
-        .hero-text-3{animation:fadeUp 0.8s ease 0.3s both;}
-        .hero-text-4{animation:fadeUp 0.8s ease 0.45s both;}
-        @media(max-width:768px){.hide-mobile{display:none!important;}.hero-grid{flexDirection:column!important;}.features-grid{gridTemplateColumns:1fr!important;}.stats-grid{gridTemplateColumns:1fr 1fr!important;}}
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        ::selection { background: #85325c; color: #f0eada; }
+        .nav-link { color: #3d1a2e; text-decoration: none; font-size: 0.9rem; font-weight: 500; opacity: 0.75; transition: opacity 0.2s; }
+        .nav-link:hover { opacity: 1; }
+        .lang-tag { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; }
+        .dot-pattern { background-image: radial-gradient(#85325c18 1.5px, transparent 1.5px); background-size: 24px 24px; }
+        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .float { animation: float 4s ease-in-out infinite; }
+        .hero-text   { animation: fadeUp 0.8s ease both; }
+        .hero-text-2 { animation: fadeUp 0.8s ease 0.15s both; }
+        .hero-text-3 { animation: fadeUp 0.8s ease 0.30s both; }
+        .hero-text-4 { animation: fadeUp 0.8s ease 0.45s both; }
+        .btn-cta { background: #85325c; color: #f0eada; border: none; border-radius: 50px; padding: 0.95rem 2.2rem; font-size: 1rem; font-weight: 500; cursor: pointer; font-family: var(--font-montserrat); transition: all 0.2s; }
+        .btn-cta:hover { background: #6e2249; transform: translateY(-2px); }
+        .btn-outline { background: transparent; color: #85325c; border: 1.5px solid #85325c; border-radius: 50px; padding: 0.95rem 2rem; font-size: 1rem; font-weight: 500; cursor: pointer; font-family: var(--font-montserrat); transition: all 0.2s; }
+        .btn-outline:hover { background: #85325c; color: #f0eada; }
+        .feat-card-hover { transition: transform 0.25s; }
+        .feat-card-hover:hover { transform: translateY(-4px); }
+        @media (max-width: 768px) {
+          .hide-mobile { display: none !important; }
+          .hero-grid   { flex-direction: column !important; }
+          .feats-grid  { grid-template-columns: 1fr !important; }
+          .stats-grid  { grid-template-columns: 1fr 1fr !important; }
+        }
       `}</style>
 
-      {/* Navbar */}
+      {/* ── Navbar ── */}
       <nav
         style={{
           position: "sticky",
@@ -696,25 +707,22 @@ export default function LandingPage() {
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                 <path
-                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                  d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
                   fill="#f0eada"
+                  opacity="0.85"
                 />
-                <path
-                  d="M11 7h2v6h-2zm0 8h2v2h-2z"
-                  fill="#f0eada"
-                  opacity="0.6"
-                />
+                <circle cx="12" cy="12" r="4" fill="#f0eada" />
               </svg>
             </div>
             <span
               style={{
-                fontFamily: "'Playfair Display',serif",
+                fontFamily: "var(--font-playfair)",
                 fontWeight: 700,
                 fontSize: "1.15rem",
                 color: "#3d1a2e",
               }}
             >
-              Seaht AI
+              Sehat AI
             </span>
             <span
               style={{
@@ -743,19 +751,16 @@ export default function LandingPage() {
               Impact
             </a>
             <button
-              className="btn-primary"
-              style={{
-                padding: "0.6rem 1.4rem",
-                fontSize: "0.85rem",
-                borderRadius: 50,
-              }}
+              className="btn-cta"
+              style={{ padding: "0.6rem 1.4rem", fontSize: "0.85rem" }}
+               onClick={() => router.push("/app")}
             >
               Try Free
             </button>
           </div>
           <button
             className="hide-desktop"
-            onClick={() => setMenuOpen(!menuOpen)}
+            onClick={() => setMenuOpen((v) => !v)}
             style={{
               background: "none",
               border: "none",
@@ -770,7 +775,7 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* Hero */}
+      {/* ── Hero ── */}
       <section
         style={{
           maxWidth: 1160,
@@ -814,7 +819,7 @@ export default function LandingPage() {
           <h1
             className="hero-text-2"
             style={{
-              fontFamily: "'Playfair Display',serif",
+              fontFamily: "var(--font-playfair)",
               fontSize: "clamp(2.4rem,5.5vw,4rem)",
               fontWeight: 700,
               color: "#3d1a2e",
@@ -851,46 +856,26 @@ export default function LandingPage() {
               marginBottom: "2.5rem",
             }}
           >
-            <button
-              className="btn-primary"
-              style={{
-                fontSize: "1rem",
-                padding: "0.95rem 2.2rem",
-                borderRadius: 50,
-              }}
-            >
-              अभी शुरू करें — Start Free
-            </button>
-            <button
-              className="btn-outline"
-              style={{
-                borderRadius: 50,
-                padding: "0.95rem 2rem",
-                fontSize: "1rem",
-              }}
-            >
-              Watch demo →
-            </button>
+            <button className="btn-cta">अभी शुरू करें — Start Free</button>
+            <button className="btn-outline">Watch demo →</button>
           </div>
           <div
             className="hero-text-4"
             style={{ display: "flex", gap: 8, flexWrap: "wrap" }}
           >
-            {["हिंदी", "বাংলা", "தமிழ்", "తెలుగు", "मराठी", "ਪੰਜਾਬੀ"].map(
-              (l, i) => (
-                <span
-                  key={i}
-                  className="lang-tag"
-                  style={{
-                    background: i === 0 ? "#85325c" : "white",
-                    color: i === 0 ? "#f0eada" : "#85325c",
-                    border: "1px solid #e0c8d0",
-                  }}
-                >
-                  {l}
-                </span>
-              ),
-            )}
+            {languages.map((l, i) => (
+              <span
+                key={i}
+                className="lang-tag"
+                style={{
+                  background: i === 0 ? "#85325c" : "white",
+                  color: i === 0 ? "#f0eada" : "#85325c",
+                  border: "1px solid #e0c8d0",
+                }}
+              >
+                {l}
+              </span>
+            ))}
           </div>
         </div>
         <div
@@ -913,7 +898,6 @@ export default function LandingPage() {
           >
             <VillagerIllustration />
           </div>
-          {/* Floating badges */}
           <div
             style={{
               position: "absolute",
@@ -964,7 +948,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Stats strip */}
+      {/* ── Stats ── */}
       <section
         ref={statsRef}
         style={{ background: "#85325c", padding: "3rem 5vw", margin: "1rem 0" }}
@@ -979,12 +963,7 @@ export default function LandingPage() {
           }}
           className="stats-grid"
         >
-          {[
-            { number: "108M+", label: "Indians far from a hospital" },
-            { number: "22+", label: "Indian languages supported" },
-            { number: "80+", label: "Common conditions covered offline" },
-            { number: "Free", label: "Always free for rural users" },
-          ].map((s, i) => (
+          {stats.map((s, i) => (
             <div
               key={i}
               style={{
@@ -999,7 +978,7 @@ export default function LandingPage() {
                   fontSize: "clamp(1.8rem,4vw,2.8rem)",
                   fontWeight: 700,
                   color: "#f0eada",
-                  fontFamily: "'Playfair Display',serif",
+                  fontFamily: "var(--font-playfair)",
                   lineHeight: 1,
                 }}
               >
@@ -1020,7 +999,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Features */}
+      {/* ── Features ── */}
       <section
         id="features"
         style={{ maxWidth: 1160, margin: "0 auto", padding: "5rem 5vw" }}
@@ -1040,7 +1019,7 @@ export default function LandingPage() {
           </div>
           <h2
             style={{
-              fontFamily: "'Playfair Display',serif",
+              fontFamily: "var(--font-playfair)",
               fontSize: "clamp(1.8rem,4vw,2.8rem)",
               fontWeight: 700,
               color: "#3d1a2e",
@@ -1055,53 +1034,20 @@ export default function LandingPage() {
           </h2>
         </div>
         <div
-          className="features-grid"
+          className="feats-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))",
             gap: "1.25rem",
           }}
         >
-          <FeatureCard
-            delay={0}
-            icon="🔊"
-            title="Voice symptom input"
-            desc="Speak your symptoms in Hindi or any regional language — no typing needed. Designed for low-literacy users."
-          />
-          <FeatureCard
-            delay={0.1}
-            icon="🩺"
-            title="AI diagnosis"
-            desc="Get an instant assessment — mild, moderate, or urgent — with plain-language explanations you can actually understand."
-          />
-          <FeatureCard
-            delay={0.2}
-            icon="💊"
-            title="OTC medicine guide"
-            desc="Safe over-the-counter medicines from your nearest Jan Aushadhi store, with dosage in Hindi. Always under ₹30."
-          />
-          <FeatureCard
-            delay={0.3}
-            icon="📋"
-            title="Report analyser"
-            desc="Click a photo of your blood report or prescription. Get a clear explanation in simple Hindi within seconds."
-          />
-          <FeatureCard
-            delay={0.4}
-            icon="📍"
-            title="Nearest hospital"
-            desc="GPS-based search finds your nearest PHC, government hospital, or clinic — with distance, hours, and directions."
-          />
-          <FeatureCard
-            delay={0.5}
-            icon="📵"
-            title="Works offline"
-            desc="No internet? No problem. 80+ common conditions are bundled locally. Works on 2G and in remote villages."
-          />
+          {features.map((f, i) => (
+            <FeatureCard key={i} {...f} />
+          ))}
         </div>
       </section>
 
-      {/* How it works */}
+      {/* ── How it works ── */}
       <section id="how" style={{ background: "white", padding: "5rem 5vw" }}>
         <div
           style={{
@@ -1128,7 +1074,7 @@ export default function LandingPage() {
             </div>
             <h2
               style={{
-                fontFamily: "'Playfair Display',serif",
+                fontFamily: "var(--font-playfair)",
                 fontSize: "clamp(1.8rem,4vw,2.6rem)",
                 fontWeight: 700,
                 color: "#3d1a2e",
@@ -1180,11 +1126,7 @@ export default function LandingPage() {
           >
             <div
               className="dot-pattern"
-              style={{
-                borderRadius: 32,
-                padding: "2rem",
-                position: "relative",
-              }}
+              style={{ borderRadius: 32, padding: "2rem" }}
             >
               <div className="float" style={{ animationDelay: "0.5s" }}>
                 <PhoneIllustration />
@@ -1194,7 +1136,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Impact */}
+      {/* ── Impact ── */}
       <section
         id="impact"
         style={{
@@ -1218,7 +1160,7 @@ export default function LandingPage() {
         </div>
         <h2
           style={{
-            fontFamily: "'Playfair Display',serif",
+            fontFamily: "var(--font-playfair)",
             fontSize: "clamp(1.8rem,4vw,2.8rem)",
             fontWeight: 700,
             color: "#3d1a2e",
@@ -1241,31 +1183,17 @@ export default function LandingPage() {
           }}
         >
           A farmer in Bihar with chest pain may have to travel 40km to reach a
-          hospital. We're the triage layer that helps them decide — rest at home
-          or go now.
+          hospital. We&apos;re the triage layer that helps them decide — rest at
+          home or go now.
         </p>
         <div
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))",
             gap: "1.5rem",
-            marginBottom: "3rem",
           }}
         >
-          {[
-            {
-              n: "1 in 3",
-              l: "rural Indians can't read",
-              sub: "Voice-first solves this",
-            },
-            {
-              n: "40km",
-              l: "avg. distance to hospital",
-              sub: "in rural Bihar & UP",
-            },
-            { n: "₹0", l: "cost to use Seaht AI", sub: "Free, always" },
-            { n: "30 sec", l: "to get a diagnosis", sub: "vs 3hr clinic wait" },
-          ].map((s, i) => {
+          {impactCards.map((s, i) => {
             const [ref, inView] = useInView();
             return (
               <div
@@ -1283,7 +1211,7 @@ export default function LandingPage() {
               >
                 <div
                   style={{
-                    fontFamily: "'Playfair Display',serif",
+                    fontFamily: "var(--font-playfair)",
                     fontSize: "2.4rem",
                     fontWeight: 700,
                     color: "#85325c",
@@ -1311,7 +1239,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* CTA */}
+      {/* ── CTA ── */}
       <section
         style={{
           background: "#3d1a2e",
@@ -1361,7 +1289,7 @@ export default function LandingPage() {
           </div>
           <h2
             style={{
-              fontFamily: "'Playfair Display',serif",
+              fontFamily: "var(--font-playfair)",
               fontSize: "clamp(2rem,5vw,3.2rem)",
               fontWeight: 700,
               color: "#f0eada",
@@ -1404,10 +1332,17 @@ export default function LandingPage() {
                 fontSize: "1rem",
                 fontWeight: 600,
                 cursor: "pointer",
+                fontFamily: "var(--font-montserrat)",
                 transition: "all 0.2s",
               }}
-              onMouseOver={(e) => (e.target.style.background = "#fff")}
-              onMouseOut={(e) => (e.target.style.background = "#f0eada")}
+              onMouseOver={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.background =
+                  "#fff";
+              }}
+              onMouseOut={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.background =
+                  "#f0eada";
+              }}
             >
               अभी शुरू करें — Try Free
             </button>
@@ -1415,15 +1350,22 @@ export default function LandingPage() {
               style={{
                 background: "transparent",
                 color: "#f0eada",
-                border: "1.5px solid #f0eada60",
+                border: "1.5px solid rgba(240,234,218,0.4)",
                 borderRadius: 50,
                 padding: "1rem 2rem",
                 fontSize: "1rem",
                 cursor: "pointer",
+                fontFamily: "var(--font-montserrat)",
                 transition: "all 0.2s",
               }}
-              onMouseOver={(e) => (e.target.style.borderColor = "#f0eada")}
-              onMouseOut={(e) => (e.target.style.borderColor = "#f0eada60")}
+              onMouseOver={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.borderColor =
+                  "#f0eada";
+              }}
+              onMouseOut={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.borderColor =
+                  "rgba(240,234,218,0.4)";
+              }}
             >
               View on GitHub →
             </button>
@@ -1431,7 +1373,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* ── Footer ── */}
       <footer
         style={{
           background: "#2d1020",
@@ -1461,24 +1403,26 @@ export default function LandingPage() {
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
               <path
-                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
                 fill="#f0eada"
+                opacity="0.8"
               />
+              <circle cx="12" cy="12" r="4" fill="#f0eada" />
             </svg>
           </div>
           <span
             style={{
-              fontFamily: "'Playfair Display',serif",
+              fontFamily: "var(--font-playfair)",
               color: "#f0eada",
               fontWeight: 600,
             }}
           >
-            Seaht AI
+            Sehat AI
           </span>
         </div>
         <p style={{ fontSize: "0.82rem", color: "#8a6a7a" }}>
-          Built with ❤️ by Suryansh for rural India · Hackathon project · Not a
-          substitute for professional medical advice
+          Built with ❤️ for rural India · Hackathon project · Not a substitute
+          for professional medical advice
         </p>
       </footer>
     </div>
