@@ -1,0 +1,1486 @@
+"use client";
+import { useState, useEffect, useRef } from "react";
+
+const useInView = (threshold = 0.15) => {
+  const ref = useRef(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) setInView(true);
+      },
+      { threshold },
+    );
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, inView];
+};
+
+const DoctorIllustration = () => (
+  <svg
+    viewBox="0 0 320 380"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    style={{ width: "100%", maxWidth: 320 }}
+  >
+    {/* Background circle */}
+    <circle cx="160" cy="200" r="150" fill="#e8d5c4" opacity="0.35" />
+    {/* Body */}
+    <ellipse cx="160" cy="290" rx="62" ry="75" fill="#85325c" />
+    {/* White coat */}
+    <ellipse cx="160" cy="295" rx="58" ry="70" fill="#f5ede0" />
+    <rect x="130" y="240" width="60" height="120" rx="8" fill="#f5ede0" />
+    {/* Coat lapels */}
+    <path d="M160 250 L140 230 L138 280 Z" fill="#85325c" opacity="0.15" />
+    <path d="M160 250 L180 230 L182 280 Z" fill="#85325c" opacity="0.15" />
+    {/* Stethoscope */}
+    <path
+      d="M145 265 Q130 280 132 298 Q134 318 148 318 Q162 318 162 305 Q162 295 155 292"
+      stroke="#85325c"
+      strokeWidth="3.5"
+      fill="none"
+      strokeLinecap="round"
+    />
+    <circle cx="155" cy="290" r="7" fill="#85325c" />
+    <circle cx="155" cy="290" r="4" fill="#f0eada" />
+    {/* Neck */}
+    <rect x="148" y="168" width="24" height="32" rx="10" fill="#d4956a" />
+    {/* Head */}
+    <ellipse cx="160" cy="150" rx="46" ry="52" fill="#e8a87c" />
+    {/* Hair */}
+    <ellipse cx="160" cy="108" rx="46" ry="28" fill="#3d1a0e" />
+    <path
+      d="M114 120 Q108 100 120 88 Q140 72 160 72 Q180 72 200 88 Q212 100 206 120"
+      fill="#3d1a0e"
+    />
+    {/* Bun */}
+    <circle cx="160" cy="82" r="18" fill="#3d1a0e" />
+    <path
+      d="M148 76 Q160 68 172 76"
+      stroke="#5a2a14"
+      strokeWidth="2"
+      fill="none"
+    />
+    {/* Face - eyes */}
+    <ellipse cx="147" cy="148" rx="6" ry="7" fill="white" />
+    <ellipse cx="173" cy="148" rx="6" ry="7" fill="white" />
+    <circle cx="148" cy="149" r="4" fill="#2d1810" />
+    <circle cx="174" cy="149" r="4" fill="#2d1810" />
+    <circle cx="150" cy="147" r="1.5" fill="white" />
+    <circle cx="176" cy="147" r="1.5" fill="white" />
+    {/* Eyebrows */}
+    <path
+      d="M141 139 Q148 135 155 138"
+      stroke="#3d1a0e"
+      strokeWidth="2.5"
+      fill="none"
+      strokeLinecap="round"
+    />
+    <path
+      d="M165 138 Q172 135 179 139"
+      stroke="#3d1a0e"
+      strokeWidth="2.5"
+      fill="none"
+      strokeLinecap="round"
+    />
+    {/* Nose */}
+    <path
+      d="M158 155 Q156 165 158 168 Q162 170 166 168 Q168 165 162 155"
+      fill="none"
+      stroke="#c4845a"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+    {/* Smile */}
+    <path
+      d="M148 174 Q160 184 172 174"
+      stroke="#c4845a"
+      strokeWidth="2.5"
+      fill="none"
+      strokeLinecap="round"
+    />
+    {/* Cheeks */}
+    <ellipse cx="138" cy="168" rx="10" ry="6" fill="#e88c6a" opacity="0.4" />
+    <ellipse cx="182" cy="168" rx="10" ry="6" fill="#e88c6a" opacity="0.4" />
+    {/* Clipboard */}
+    <rect
+      x="178"
+      y="260"
+      width="38"
+      height="48"
+      rx="4"
+      fill="#85325c"
+      opacity="0.85"
+    />
+    <rect x="181" y="264" width="32" height="40" rx="2" fill="#f5ede0" />
+    <rect
+      x="185"
+      y="272"
+      width="20"
+      height="2.5"
+      rx="1"
+      fill="#85325c"
+      opacity="0.5"
+    />
+    <rect
+      x="185"
+      y="278"
+      width="16"
+      height="2.5"
+      rx="1"
+      fill="#85325c"
+      opacity="0.4"
+    />
+    <rect
+      x="185"
+      y="284"
+      width="18"
+      height="2.5"
+      rx="1"
+      fill="#85325c"
+      opacity="0.4"
+    />
+    <rect x="192" y="255" width="12" height="8" rx="3" fill="#85325c" />
+    {/* Arms */}
+    <path
+      d="M102 260 Q88 280 92 305 Q96 320 108 318"
+      stroke="#f5ede0"
+      strokeWidth="18"
+      strokeLinecap="round"
+      fill="none"
+    />
+    <path
+      d="M218 260 Q232 275 228 298 Q226 312 216 318"
+      stroke="#f5ede0"
+      strokeWidth="18"
+      strokeLinecap="round"
+      fill="none"
+    />
+    <ellipse cx="96" cy="314" rx="14" ry="10" fill="#d4956a" />
+    <ellipse cx="218" cy="316" rx="14" ry="10" fill="#d4956a" />
+    {/* Floating hearts */}
+    <path
+      d="M52 180 Q52 173 58 173 Q64 173 64 180 Q64 187 52 195 Q40 187 40 180 Q40 173 46 173 Q52 173 52 180Z"
+      fill="#85325c"
+      opacity="0.25"
+      transform="scale(0.8) translate(15,10)"
+    />
+    <path
+      d="M268 120 Q268 114 273 114 Q278 114 278 120 Q278 126 268 133 Q258 126 258 120 Q258 114 263 114 Q268 114 268 120Z"
+      fill="#85325c"
+      opacity="0.2"
+    />
+    <path
+      d="M36 130 Q36 125 40 125 Q44 125 44 130 Q44 135 36 140 Q28 135 28 130 Q28 125 32 125 Q36 125 36 130Z"
+      fill="#85325c"
+      opacity="0.15"
+    />
+    {/* Stars / sparkles */}
+    <path
+      d="M240 160 L242 155 L244 160 L249 162 L244 164 L242 169 L240 164 L235 162Z"
+      fill="#85325c"
+      opacity="0.3"
+    />
+    <path
+      d="M75 220 L76.5 216 L78 220 L82 221.5 L78 223 L76.5 227 L75 223 L71 221.5Z"
+      fill="#85325c"
+      opacity="0.2"
+    />
+  </svg>
+);
+
+const VillagerIllustration = () => (
+  <svg
+    viewBox="0 0 200 220"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    style={{ width: "100%", maxWidth: 180 }}
+  >
+    <circle cx="100" cy="120" r="90" fill="#d4b896" opacity="0.2" />
+    {/* Body - kurta */}
+    <ellipse cx="100" cy="175" rx="42" ry="45" fill="#c9956a" opacity="0.85" />
+    <rect x="62" y="145" width="76" height="75" rx="6" fill="#b8845a" />
+    {/* Kurta pattern */}
+    <path
+      d="M85 155 L85 195"
+      stroke="#f0eada"
+      strokeWidth="1.5"
+      opacity="0.4"
+    />
+    <path
+      d="M100 152 L100 200"
+      stroke="#f0eada"
+      strokeWidth="1.5"
+      opacity="0.4"
+    />
+    <path
+      d="M115 155 L115 195"
+      stroke="#f0eada"
+      strokeWidth="1.5"
+      opacity="0.4"
+    />
+    {/* Neck */}
+    <rect x="90" y="110" width="20" height="26" rx="8" fill="#d4956a" />
+    {/* Head */}
+    <ellipse cx="100" cy="92" rx="36" ry="38" fill="#c8845a" />
+    {/* Turban */}
+    <ellipse cx="100" cy="60" rx="38" ry="20" fill="#85325c" />
+    <path
+      d="M62 62 Q100 42 138 62 Q138 58 100 50 Q62 58 62 62Z"
+      fill="#6e2249"
+    />
+    <path
+      d="M62 65 Q68 55 100 52 Q132 55 138 65"
+      fill="#9e3d6e"
+      opacity="0.5"
+    />
+    {/* Turban fold */}
+    <ellipse cx="100" cy="56" rx="12" ry="8" fill="#9e3d6e" />
+    {/* Face */}
+    <ellipse cx="86" cy="90" rx="5" ry="6" fill="white" />
+    <ellipse cx="114" cy="90" rx="5" ry="6" fill="white" />
+    <circle cx="87" cy="91" r="3.5" fill="#2d1810" />
+    <circle cx="115" cy="91" r="3.5" fill="#2d1810" />
+    <circle cx="88" cy="90" r="1" fill="white" />
+    <circle cx="116" cy="90" r="1" fill="white" />
+    <path
+      d="M80 82 Q86 79 92 81"
+      stroke="#3d1a0e"
+      strokeWidth="2"
+      fill="none"
+      strokeLinecap="round"
+    />
+    <path
+      d="M108 81 Q114 79 120 82"
+      stroke="#3d1a0e"
+      strokeWidth="2"
+      fill="none"
+      strokeLinecap="round"
+    />
+    <path
+      d="M90 103 Q100 111 110 103"
+      stroke="#a06040"
+      strokeWidth="2"
+      fill="none"
+      strokeLinecap="round"
+    />
+    <ellipse cx="80" cy="100" rx="8" ry="5" fill="#e07a5a" opacity="0.35" />
+    <ellipse cx="120" cy="100" rx="8" ry="5" fill="#e07a5a" opacity="0.35" />
+    {/* Moustache */}
+    <path d="M90 97 Q100 101 110 97" fill="#3d1a0e" opacity="0.6" />
+    {/* Phone in hand */}
+    <rect x="130" y="155" width="22" height="36" rx="4" fill="#2d1810" />
+    <rect
+      x="132"
+      y="158"
+      width="18"
+      height="28"
+      rx="2"
+      fill="#85325c"
+      opacity="0.9"
+    />
+    <rect
+      x="134"
+      y="161"
+      width="14"
+      height="20"
+      rx="1"
+      fill="#f0eada"
+      opacity="0.8"
+    />
+    {/* Screen content suggestion */}
+    <rect
+      x="136"
+      y="163"
+      width="10"
+      height="2"
+      rx="1"
+      fill="#85325c"
+      opacity="0.6"
+    />
+    <rect
+      x="136"
+      y="167"
+      width="8"
+      height="1.5"
+      rx="1"
+      fill="#85325c"
+      opacity="0.4"
+    />
+    <rect
+      x="136"
+      y="171"
+      width="9"
+      height="1.5"
+      rx="1"
+      fill="#85325c"
+      opacity="0.4"
+    />
+  </svg>
+);
+
+const PhoneIllustration = () => (
+  <svg
+    viewBox="0 0 200 300"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    style={{ width: "100%", maxWidth: 160 }}
+  >
+    <rect x="30" y="20" width="140" height="260" rx="24" fill="#85325c" />
+    <rect x="34" y="24" width="132" height="252" rx="21" fill="#2d0f1e" />
+    <rect x="40" y="40" width="120" height="220" rx="10" fill="#f0eada" />
+    {/* Status bar */}
+    <rect x="40" y="40" width="120" height="20" rx="10" fill="#85325c" />
+    <circle cx="100" cy="30" r="6" fill="#1a0810" />
+    {/* App header */}
+    <rect x="40" y="60" width="120" height="36" fill="#85325c" />
+    <circle cx="58" cy="78" r="10" fill="#f0eada" opacity="0.3" />
+    <rect x="74" y="72" width="60" height="5" rx="2" fill="#f0eada" />
+    <rect
+      x="74"
+      y="80"
+      width="40"
+      height="3.5"
+      rx="1"
+      fill="#f0eada"
+      opacity="0.6"
+    />
+    {/* Language pills */}
+    <rect x="46" y="103" width="30" height="14" rx="7" fill="#85325c" />
+    <rect x="80" y="103" width="30" height="14" rx="7" fill="#e8d5c4" />
+    <rect x="114" y="103" width="30" height="14" rx="7" fill="#e8d5c4" />
+    <rect
+      x="48"
+      y="107"
+      width="26"
+      height="6"
+      rx="2"
+      fill="#f0eada"
+      opacity="0.9"
+    />
+    {/* Symptom chips */}
+    <rect
+      x="46"
+      y="125"
+      width="52"
+      height="28"
+      rx="8"
+      fill="#f5ede0"
+      stroke="#85325c"
+      strokeWidth="1.5"
+    />
+    <rect
+      x="104"
+      y="125"
+      width="52"
+      height="28"
+      rx="8"
+      fill="#85325c"
+      opacity="0.15"
+      stroke="#85325c"
+      strokeWidth="1.5"
+    />
+    <rect
+      x="46"
+      y="159"
+      width="52"
+      height="28"
+      rx="8"
+      fill="#f5ede0"
+      stroke="#e8d5c4"
+      strokeWidth="1"
+    />
+    <rect
+      x="104"
+      y="159"
+      width="52"
+      height="28"
+      rx="8"
+      fill="#85325c"
+      opacity="0.15"
+      stroke="#85325c"
+      strokeWidth="1.5"
+    />
+    <rect
+      x="50"
+      y="133"
+      width="36"
+      height="5"
+      rx="2"
+      fill="#85325c"
+      opacity="0.6"
+    />
+    <rect
+      x="50"
+      y="141"
+      width="28"
+      height="3"
+      rx="1"
+      fill="#85325c"
+      opacity="0.3"
+    />
+    <rect
+      x="108"
+      y="133"
+      width="36"
+      height="5"
+      rx="2"
+      fill="#85325c"
+      opacity="0.7"
+    />
+    <rect
+      x="108"
+      y="141"
+      width="28"
+      height="3"
+      rx="1"
+      fill="#85325c"
+      opacity="0.4"
+    />
+    <rect
+      x="50"
+      y="167"
+      width="30"
+      height="4"
+      rx="2"
+      fill="#85325c"
+      opacity="0.5"
+    />
+    <rect
+      x="108"
+      y="167"
+      width="36"
+      height="5"
+      rx="2"
+      fill="#85325c"
+      opacity="0.7"
+    />
+    {/* CTA button */}
+    <rect x="46" y="198" width="110" height="34" rx="10" fill="#85325c" />
+    <rect
+      x="68"
+      y="208"
+      width="66"
+      height="14"
+      rx="4"
+      fill="#f0eada"
+      opacity="0.9"
+    />
+    {/* Bottom nav */}
+    <rect x="40" y="240" width="120" height="20" fill="#f5f0e8" />
+    <circle cx="70" cy="250" r="5" fill="#85325c" opacity="0.6" />
+    <circle cx="100" cy="250" r="5" fill="#85325c" opacity="0.3" />
+    <circle cx="130" cy="250" r="5" fill="#85325c" opacity="0.3" />
+    {/* Home indicator */}
+    <rect
+      x="75"
+      y="272"
+      width="50"
+      height="4"
+      rx="2"
+      fill="#85325c"
+      opacity="0.3"
+    />
+  </svg>
+);
+
+const StatCard = ({ number, label, delay }) => {
+  const [ref, inView] = useInView();
+  return (
+    <div
+      ref={ref}
+      style={{
+        textAlign: "center",
+        opacity: inView ? 1 : 0,
+        transform: inView ? "translateY(0)" : "translateY(24px)",
+        transition: `all 0.6s ease ${delay}s`,
+      }}
+    >
+      <div
+        style={{
+          fontSize: "clamp(2rem,5vw,3.2rem)",
+          fontWeight: 700,
+          color: "#85325c",
+          fontFamily: "'Playfair Display',serif",
+          lineHeight: 1,
+        }}
+      >
+        {number}
+      </div>
+      <div
+        style={{
+          fontSize: "0.9rem",
+          color: "#8a6a5a",
+          marginTop: 6,
+          lineHeight: 1.4,
+        }}
+      >
+        {label}
+      </div>
+    </div>
+  );
+};
+
+const FeatureCard = ({ icon, title, desc, delay }) => {
+  const [ref, inView] = useInView();
+  return (
+    <div
+      ref={ref}
+      style={{
+        background: "white",
+        borderRadius: 20,
+        padding: "2rem 1.75rem",
+        border: "1.5px solid #e8d5c4",
+        opacity: inView ? 1 : 0,
+        transform: inView ? "translateY(0)" : "translateY(32px)",
+        transition: `all 0.65s ease ${delay}s`,
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          top: -20,
+          right: -20,
+          width: 80,
+          height: 80,
+          borderRadius: "50%",
+          background: "#f0eada",
+          opacity: 0.6,
+        }}
+      />
+      <div style={{ fontSize: "2rem", marginBottom: "1rem" }}>{icon}</div>
+      <div
+        style={{
+          fontSize: "1.1rem",
+          fontWeight: 600,
+          color: "#3d1a2e",
+          fontFamily: "'Playfair Display',serif",
+          marginBottom: "0.6rem",
+        }}
+      >
+        {title}
+      </div>
+      <div style={{ fontSize: "0.9rem", color: "#7a5a6a", lineHeight: 1.65 }}>
+        {desc}
+      </div>
+    </div>
+  );
+};
+
+const HowStep = ({ num, title, desc, delay }) => {
+  const [ref, inView] = useInView();
+  return (
+    <div
+      ref={ref}
+      style={{
+        display: "flex",
+        gap: "1.25rem",
+        alignItems: "flex-start",
+        opacity: inView ? 1 : 0,
+        transform: inView ? "translateX(0)" : "translateX(-24px)",
+        transition: `all 0.6s ease ${delay}s`,
+      }}
+    >
+      <div
+        style={{
+          width: 44,
+          height: 44,
+          borderRadius: "50%",
+          background: "#85325c",
+          color: "#f0eada",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "1.1rem",
+          fontWeight: 700,
+          flexShrink: 0,
+          fontFamily: "'Playfair Display',serif",
+        }}
+      >
+        {num}
+      </div>
+      <div>
+        <div
+          style={{
+            fontSize: "1rem",
+            fontWeight: 600,
+            color: "#3d1a2e",
+            marginBottom: 4,
+          }}
+        >
+          {title}
+        </div>
+        <div
+          style={{ fontSize: "0.875rem", color: "#8a6a7a", lineHeight: 1.6 }}
+        >
+          {desc}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default function LandingPage() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [heroRef, heroInView] = useInView(0.05);
+  const [statsRef, statsInView] = useInView();
+
+  return (
+    <div
+      style={{
+        fontFamily: "'DM Sans',sans-serif",
+        background: "#f0eada",
+        minHeight: "100vh",
+        overflowX: "hidden",
+      }}
+    >
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=DM+Sans:wght@300;400;500&display=swap');
+        *{box-sizing:border-box;margin:0;padding:0;}
+        html{scroll-behavior:smooth;}
+        ::selection{background:#85325c;color:#f0eada;}
+        .nav-link{color:#3d1a2e;text-decoration:none;font-size:0.9rem;font-weight:500;opacity:0.75;transition:opacity 0.2s;}
+        .nav-link:hover{opacity:1;}
+        .btn-primary{background:#85325c;color:#f0eada;border:none;borderRadius:50px;padding:0.875rem 2rem;fontSize:0.95rem;fontWeight:500;cursor:pointer;transition:all 0.25s;display:inline-block;textDecoration:none;}
+        .btn-primary:hover{background:#6e2249;transform:translateY(-2px);}
+        .btn-outline{background:transparent;color:#85325c;border:1.5px solid #85325c;borderRadius:50px;padding:0.8rem 1.8rem;fontSize:0.9rem;fontWeight:500;cursor:pointer;transition:all 0.25s;}
+        .btn-outline:hover{background:#85325c;color:#f0eada;}
+        .lang-tag{display:inline-block;padding:4px 12px;borderRadius:20px;fontSize:0.8rem;fontWeight:500;}
+        .dot-pattern{backgroundImage:radial-gradient(#85325c18 1.5px,transparent 1.5px);backgroundSize:24px 24px;}
+        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+        .float{animation:float 4s ease-in-out infinite;}
+        .hero-text{animation:fadeUp 0.8s ease both;}
+        .hero-text-2{animation:fadeUp 0.8s ease 0.15s both;}
+        .hero-text-3{animation:fadeUp 0.8s ease 0.3s both;}
+        .hero-text-4{animation:fadeUp 0.8s ease 0.45s both;}
+        @media(max-width:768px){.hide-mobile{display:none!important;}.hero-grid{flexDirection:column!important;}.features-grid{gridTemplateColumns:1fr!important;}.stats-grid{gridTemplateColumns:1fr 1fr!important;}}
+      `}</style>
+
+      {/* Navbar */}
+      <nav
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
+          background: "rgba(240,234,218,0.92)",
+          backdropFilter: "blur(12px)",
+          borderBottom: "1px solid #e0cfc0",
+          padding: "0 5vw",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: 1160,
+            margin: "0 auto",
+            height: 64,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div
+              style={{
+                width: 34,
+                height: 34,
+                borderRadius: 10,
+                background: "#85325c",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                  fill="#f0eada"
+                />
+                <path
+                  d="M11 7h2v6h-2zm0 8h2v2h-2z"
+                  fill="#f0eada"
+                  opacity="0.6"
+                />
+              </svg>
+            </div>
+            <span
+              style={{
+                fontFamily: "'Playfair Display',serif",
+                fontWeight: 700,
+                fontSize: "1.15rem",
+                color: "#3d1a2e",
+              }}
+            >
+              Seaht AI
+            </span>
+            <span
+              style={{
+                fontSize: "0.7rem",
+                background: "#85325c",
+                color: "#f0eada",
+                padding: "2px 8px",
+                borderRadius: 20,
+                fontWeight: 500,
+              }}
+            >
+              Beta
+            </span>
+          </div>
+          <div
+            className="hide-mobile"
+            style={{ display: "flex", gap: "2rem", alignItems: "center" }}
+          >
+            <a href="#features" className="nav-link">
+              Features
+            </a>
+            <a href="#how" className="nav-link">
+              How it works
+            </a>
+            <a href="#impact" className="nav-link">
+              Impact
+            </a>
+            <button
+              className="btn-primary"
+              style={{
+                padding: "0.6rem 1.4rem",
+                fontSize: "0.85rem",
+                borderRadius: 50,
+              }}
+            >
+              Try Free
+            </button>
+          </div>
+          <button
+            className="hide-desktop"
+            onClick={() => setMenuOpen(!menuOpen)}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              fontSize: "1.4rem",
+              color: "#85325c",
+            }}
+            aria-label="menu"
+          >
+            ☰
+          </button>
+        </div>
+      </nav>
+
+      {/* Hero */}
+      <section
+        style={{
+          maxWidth: 1160,
+          margin: "0 auto",
+          padding: "5rem 5vw 3rem",
+          display: "flex",
+          alignItems: "center",
+          gap: "3rem",
+          flexWrap: "wrap",
+        }}
+        className="hero-grid"
+      >
+        <div style={{ flex: "1 1 480px", minWidth: 0 }}>
+          <div
+            className="hero-text"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              background: "white",
+              border: "1.5px solid #e8d5c4",
+              borderRadius: 50,
+              padding: "6px 16px",
+              marginBottom: "1.5rem",
+            }}
+          >
+            <div
+              style={{
+                width: 8,
+                height: 8,
+                borderRadius: "50%",
+                background: "#85325c",
+              }}
+            />
+            <span
+              style={{ fontSize: "0.82rem", color: "#85325c", fontWeight: 500 }}
+            >
+              Free for rural India · Offline ready
+            </span>
+          </div>
+          <h1
+            className="hero-text-2"
+            style={{
+              fontFamily: "'Playfair Display',serif",
+              fontSize: "clamp(2.4rem,5.5vw,4rem)",
+              fontWeight: 700,
+              color: "#3d1a2e",
+              lineHeight: 1.12,
+              marginBottom: "1.5rem",
+            }}
+          >
+            Your health,
+            <br />
+            <span style={{ color: "#85325c", fontStyle: "italic" }}>
+              in your language.
+            </span>
+          </h1>
+          <p
+            className="hero-text-3"
+            style={{
+              fontSize: "1.05rem",
+              color: "#6a4a5a",
+              lineHeight: 1.75,
+              marginBottom: "2rem",
+              maxWidth: 480,
+            }}
+          >
+            AI-powered symptom checker, report analysis, and medicine guidance —
+            available in Hindi, Bengali, Tamil, Telugu and more. Works offline.
+            Free forever.
+          </p>
+          <div
+            className="hero-text-4"
+            style={{
+              display: "flex",
+              gap: "0.75rem",
+              flexWrap: "wrap",
+              marginBottom: "2.5rem",
+            }}
+          >
+            <button
+              className="btn-primary"
+              style={{
+                fontSize: "1rem",
+                padding: "0.95rem 2.2rem",
+                borderRadius: 50,
+              }}
+            >
+              अभी शुरू करें — Start Free
+            </button>
+            <button
+              className="btn-outline"
+              style={{
+                borderRadius: 50,
+                padding: "0.95rem 2rem",
+                fontSize: "1rem",
+              }}
+            >
+              Watch demo →
+            </button>
+          </div>
+          <div
+            className="hero-text-4"
+            style={{ display: "flex", gap: 8, flexWrap: "wrap" }}
+          >
+            {["हिंदी", "বাংলা", "தமிழ்", "తెలుగు", "मराठी", "ਪੰਜਾਬੀ"].map(
+              (l, i) => (
+                <span
+                  key={i}
+                  className="lang-tag"
+                  style={{
+                    background: i === 0 ? "#85325c" : "white",
+                    color: i === 0 ? "#f0eada" : "#85325c",
+                    border: "1px solid #e0c8d0",
+                  }}
+                >
+                  {l}
+                </span>
+              ),
+            )}
+          </div>
+        </div>
+        <div
+          style={{
+            flex: "1 1 300px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "flex-end",
+            gap: "1rem",
+            position: "relative",
+            minHeight: 360,
+          }}
+        >
+          <div className="float" style={{ animationDelay: "0s" }}>
+            <DoctorIllustration />
+          </div>
+          <div
+            className="float"
+            style={{ animationDelay: "1.5s", marginBottom: "-1rem" }}
+          >
+            <VillagerIllustration />
+          </div>
+          {/* Floating badges */}
+          <div
+            style={{
+              position: "absolute",
+              top: 30,
+              right: 20,
+              background: "white",
+              borderRadius: 14,
+              padding: "10px 14px",
+              border: "1.5px solid #e8d5c4",
+              boxShadow: "0 4px 20px #85325c18",
+            }}
+          >
+            <div
+              style={{ fontSize: "0.75rem", color: "#85325c", fontWeight: 600 }}
+            >
+              ✓ Diagnosis ready
+            </div>
+            <div style={{ fontSize: "0.7rem", color: "#8a6a7a", marginTop: 2 }}>
+              बुखार · Viral fever
+            </div>
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              bottom: 60,
+              left: 0,
+              background: "#85325c",
+              borderRadius: 14,
+              padding: "10px 14px",
+            }}
+          >
+            <div
+              style={{ fontSize: "0.75rem", color: "#f0eada", fontWeight: 600 }}
+            >
+              📍 Hospital nearby
+            </div>
+            <div
+              style={{
+                fontSize: "0.7rem",
+                color: "#f0eada",
+                opacity: 0.8,
+                marginTop: 2,
+              }}
+            >
+              PHC — 2.3 km away
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats strip */}
+      <section
+        ref={statsRef}
+        style={{ background: "#85325c", padding: "3rem 5vw", margin: "1rem 0" }}
+      >
+        <div
+          style={{
+            maxWidth: 1160,
+            margin: "0 auto",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))",
+            gap: "2rem 1rem",
+          }}
+          className="stats-grid"
+        >
+          {[
+            { number: "108M+", label: "Indians far from a hospital" },
+            { number: "22+", label: "Indian languages supported" },
+            { number: "80+", label: "Common conditions covered offline" },
+            { number: "Free", label: "Always free for rural users" },
+          ].map((s, i) => (
+            <div
+              key={i}
+              style={{
+                textAlign: "center",
+                opacity: statsInView ? 1 : 0,
+                transform: statsInView ? "translateY(0)" : "translateY(20px)",
+                transition: `all 0.5s ease ${i * 0.1}s`,
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "clamp(1.8rem,4vw,2.8rem)",
+                  fontWeight: 700,
+                  color: "#f0eada",
+                  fontFamily: "'Playfair Display',serif",
+                  lineHeight: 1,
+                }}
+              >
+                {s.number}
+              </div>
+              <div
+                style={{
+                  fontSize: "0.85rem",
+                  color: "#e8d5c4",
+                  marginTop: 6,
+                  opacity: 0.85,
+                }}
+              >
+                {s.label}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Features */}
+      <section
+        id="features"
+        style={{ maxWidth: 1160, margin: "0 auto", padding: "5rem 5vw" }}
+      >
+        <div style={{ textAlign: "center", marginBottom: "3.5rem" }}>
+          <div
+            style={{
+              fontSize: "0.82rem",
+              fontWeight: 600,
+              color: "#85325c",
+              textTransform: "uppercase",
+              letterSpacing: "0.1em",
+              marginBottom: "0.75rem",
+            }}
+          >
+            What we offer
+          </div>
+          <h2
+            style={{
+              fontFamily: "'Playfair Display',serif",
+              fontSize: "clamp(1.8rem,4vw,2.8rem)",
+              fontWeight: 700,
+              color: "#3d1a2e",
+              lineHeight: 1.2,
+            }}
+          >
+            Healthcare that speaks
+            <br />
+            <span style={{ color: "#85325c", fontStyle: "italic" }}>
+              your language
+            </span>
+          </h2>
+        </div>
+        <div
+          className="features-grid"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))",
+            gap: "1.25rem",
+          }}
+        >
+          <FeatureCard
+            delay={0}
+            icon="🔊"
+            title="Voice symptom input"
+            desc="Speak your symptoms in Hindi or any regional language — no typing needed. Designed for low-literacy users."
+          />
+          <FeatureCard
+            delay={0.1}
+            icon="🩺"
+            title="AI diagnosis"
+            desc="Get an instant assessment — mild, moderate, or urgent — with plain-language explanations you can actually understand."
+          />
+          <FeatureCard
+            delay={0.2}
+            icon="💊"
+            title="OTC medicine guide"
+            desc="Safe over-the-counter medicines from your nearest Jan Aushadhi store, with dosage in Hindi. Always under ₹30."
+          />
+          <FeatureCard
+            delay={0.3}
+            icon="📋"
+            title="Report analyser"
+            desc="Click a photo of your blood report or prescription. Get a clear explanation in simple Hindi within seconds."
+          />
+          <FeatureCard
+            delay={0.4}
+            icon="📍"
+            title="Nearest hospital"
+            desc="GPS-based search finds your nearest PHC, government hospital, or clinic — with distance, hours, and directions."
+          />
+          <FeatureCard
+            delay={0.5}
+            icon="📵"
+            title="Works offline"
+            desc="No internet? No problem. 80+ common conditions are bundled locally. Works on 2G and in remote villages."
+          />
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section id="how" style={{ background: "white", padding: "5rem 5vw" }}>
+        <div
+          style={{
+            maxWidth: 1160,
+            margin: "0 auto",
+            display: "flex",
+            gap: "4rem",
+            alignItems: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          <div style={{ flex: "1 1 340px" }}>
+            <div
+              style={{
+                fontSize: "0.82rem",
+                fontWeight: 600,
+                color: "#85325c",
+                textTransform: "uppercase",
+                letterSpacing: "0.1em",
+                marginBottom: "0.75rem",
+              }}
+            >
+              Simple as 1-2-3
+            </div>
+            <h2
+              style={{
+                fontFamily: "'Playfair Display',serif",
+                fontSize: "clamp(1.8rem,4vw,2.6rem)",
+                fontWeight: 700,
+                color: "#3d1a2e",
+                lineHeight: 1.2,
+                marginBottom: "2.5rem",
+              }}
+            >
+              From symptoms
+              <br />
+              to{" "}
+              <span style={{ color: "#85325c", fontStyle: "italic" }}>
+                answers
+              </span>{" "}
+              in 30s
+            </h2>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "1.75rem",
+              }}
+            >
+              <HowStep
+                delay={0}
+                num="1"
+                title="Choose your language"
+                desc="Pick Hindi, Bengali, Tamil, Telugu or any supported language. Tap the mic and describe how you feel."
+              />
+              <HowStep
+                delay={0.15}
+                num="2"
+                title="Select your symptoms"
+                desc="Tap from common symptoms or speak freely. Add your age group for a more accurate result."
+              />
+              <HowStep
+                delay={0.3}
+                num="3"
+                title="Get your diagnosis"
+                desc="Receive a clear diagnosis, first-aid steps, safe OTC medicines, and your nearest hospital — all in your language."
+              />
+            </div>
+          </div>
+          <div
+            style={{
+              flex: "1 1 260px",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <div
+              className="dot-pattern"
+              style={{
+                borderRadius: 32,
+                padding: "2rem",
+                position: "relative",
+              }}
+            >
+              <div className="float" style={{ animationDelay: "0.5s" }}>
+                <PhoneIllustration />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Impact */}
+      <section
+        id="impact"
+        style={{
+          maxWidth: 1160,
+          margin: "0 auto",
+          padding: "5rem 5vw",
+          textAlign: "center",
+        }}
+      >
+        <div
+          style={{
+            fontSize: "0.82rem",
+            fontWeight: 600,
+            color: "#85325c",
+            textTransform: "uppercase",
+            letterSpacing: "0.1em",
+            marginBottom: "0.75rem",
+          }}
+        >
+          Why this matters
+        </div>
+        <h2
+          style={{
+            fontFamily: "'Playfair Display',serif",
+            fontSize: "clamp(1.8rem,4vw,2.8rem)",
+            fontWeight: 700,
+            color: "#3d1a2e",
+            lineHeight: 1.2,
+            marginBottom: "1rem",
+          }}
+        >
+          The problem is{" "}
+          <span style={{ color: "#85325c", fontStyle: "italic" }}>
+            enormous
+          </span>
+        </h2>
+        <p
+          style={{
+            fontSize: "1.05rem",
+            color: "#7a5a6a",
+            maxWidth: 580,
+            margin: "0 auto 3.5rem",
+            lineHeight: 1.75,
+          }}
+        >
+          A farmer in Bihar with chest pain may have to travel 40km to reach a
+          hospital. We're the triage layer that helps them decide — rest at home
+          or go now.
+        </p>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))",
+            gap: "1.5rem",
+            marginBottom: "3rem",
+          }}
+        >
+          {[
+            {
+              n: "1 in 3",
+              l: "rural Indians can't read",
+              sub: "Voice-first solves this",
+            },
+            {
+              n: "40km",
+              l: "avg. distance to hospital",
+              sub: "in rural Bihar & UP",
+            },
+            { n: "₹0", l: "cost to use Seaht AI", sub: "Free, always" },
+            { n: "30 sec", l: "to get a diagnosis", sub: "vs 3hr clinic wait" },
+          ].map((s, i) => {
+            const [ref, inView] = useInView();
+            return (
+              <div
+                key={i}
+                ref={ref}
+                style={{
+                  background: "white",
+                  borderRadius: 20,
+                  padding: "1.75rem 1.25rem",
+                  border: "1.5px solid #e8d5c4",
+                  opacity: inView ? 1 : 0,
+                  transform: inView ? "scale(1)" : "scale(0.95)",
+                  transition: `all 0.5s ease ${i * 0.1}s`,
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: "'Playfair Display',serif",
+                    fontSize: "2.4rem",
+                    fontWeight: 700,
+                    color: "#85325c",
+                    lineHeight: 1,
+                  }}
+                >
+                  {s.n}
+                </div>
+                <div
+                  style={{
+                    fontSize: "0.9rem",
+                    color: "#3d1a2e",
+                    fontWeight: 500,
+                    margin: "6px 0 4px",
+                  }}
+                >
+                  {s.l}
+                </div>
+                <div style={{ fontSize: "0.78rem", color: "#9a7a8a" }}>
+                  {s.sub}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section
+        style={{
+          background: "#3d1a2e",
+          padding: "5rem 5vw",
+          textAlign: "center",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            top: -60,
+            left: -60,
+            width: 200,
+            height: 200,
+            borderRadius: "50%",
+            background: "#85325c",
+            opacity: 0.3,
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            bottom: -80,
+            right: -40,
+            width: 280,
+            height: 280,
+            borderRadius: "50%",
+            background: "#85325c",
+            opacity: 0.2,
+          }}
+        />
+        <div style={{ position: "relative", maxWidth: 620, margin: "0 auto" }}>
+          <div
+            style={{
+              fontSize: "0.82rem",
+              fontWeight: 600,
+              color: "#e8d5c4",
+              textTransform: "uppercase",
+              letterSpacing: "0.1em",
+              marginBottom: "1rem",
+              opacity: 0.8,
+            }}
+          >
+            Join the mission
+          </div>
+          <h2
+            style={{
+              fontFamily: "'Playfair Display',serif",
+              fontSize: "clamp(2rem,5vw,3.2rem)",
+              fontWeight: 700,
+              color: "#f0eada",
+              lineHeight: 1.15,
+              marginBottom: "1.25rem",
+            }}
+          >
+            Healthcare for every
+            <br />
+            <span style={{ color: "#e8a87c", fontStyle: "italic" }}>
+              corner of India
+            </span>
+          </h2>
+          <p
+            style={{
+              fontSize: "1rem",
+              color: "#e8d5c4",
+              marginBottom: "2.5rem",
+              lineHeight: 1.7,
+              opacity: 0.9,
+            }}
+          >
+            Free. Offline. In your language. No sign-up needed.
+          </p>
+          <div
+            style={{
+              display: "flex",
+              gap: "1rem",
+              justifyContent: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            <button
+              style={{
+                background: "#f0eada",
+                color: "#85325c",
+                border: "none",
+                borderRadius: 50,
+                padding: "1rem 2.4rem",
+                fontSize: "1rem",
+                fontWeight: 600,
+                cursor: "pointer",
+                transition: "all 0.2s",
+              }}
+              onMouseOver={(e) => (e.target.style.background = "#fff")}
+              onMouseOut={(e) => (e.target.style.background = "#f0eada")}
+            >
+              अभी शुरू करें — Try Free
+            </button>
+            <button
+              style={{
+                background: "transparent",
+                color: "#f0eada",
+                border: "1.5px solid #f0eada60",
+                borderRadius: 50,
+                padding: "1rem 2rem",
+                fontSize: "1rem",
+                cursor: "pointer",
+                transition: "all 0.2s",
+              }}
+              onMouseOver={(e) => (e.target.style.borderColor = "#f0eada")}
+              onMouseOut={(e) => (e.target.style.borderColor = "#f0eada60")}
+            >
+              View on GitHub →
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer
+        style={{
+          background: "#2d1020",
+          padding: "2rem 5vw",
+          textAlign: "center",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 10,
+            marginBottom: "0.75rem",
+          }}
+        >
+          <div
+            style={{
+              width: 28,
+              height: 28,
+              borderRadius: 8,
+              background: "#85325c",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                fill="#f0eada"
+              />
+            </svg>
+          </div>
+          <span
+            style={{
+              fontFamily: "'Playfair Display',serif",
+              color: "#f0eada",
+              fontWeight: 600,
+            }}
+          >
+            Seaht AI
+          </span>
+        </div>
+        <p style={{ fontSize: "0.82rem", color: "#8a6a7a" }}>
+          Built with ❤️ by Suryansh for rural India · Hackathon project · Not a
+          substitute for professional medical advice
+        </p>
+      </footer>
+    </div>
+  );
+}
