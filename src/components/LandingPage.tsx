@@ -1,5 +1,6 @@
 "use client";
-import router from "next/dist/shared/lib/router/router";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useState, useEffect, useRef, RefObject } from "react";
 
 /* ─── hooks ─────────────────────────────────────────────────────────────── */
@@ -571,7 +572,8 @@ const HowStep = ({ num, title, desc, delay }: HowStepProps) => {
 
 /* ─── main page ──────────────────────────────────────────────────────────── */
 export default function LandingPage() {
-  const [, setMenuOpen] = useState(false);
+  const router = useRouter();
+  const [menuOpen, setMenuOpen] = useState(false);
   const [statsRef, statsInView] = useInView();
 
   const languages = ["हिंदी", "বাংলা", "தமிழ்", "తెలుగు", "मराठी", "ਪੰਜਾਬੀ"];
@@ -629,7 +631,7 @@ export default function LandingPage() {
       sub: "Voice-first solves this",
     },
     { n: "40km", l: "avg. distance to hospital", sub: "in rural Bihar & UP" },
-    { n: "₹0", l: "cost to use Sehat AI", sub: "Free, always" },
+    { n: "₹0", l: "cost to use ArogyaMitra AI", sub: "Free, always" },
     { n: "30 sec", l: "to get a diagnosis", sub: "vs 3hr clinic wait" },
   ];
 
@@ -665,9 +667,21 @@ export default function LandingPage() {
         .feat-card-hover:hover { transform: translateY(-4px); }
         @media (max-width: 768px) {
           .hide-mobile { display: none !important; }
-          .hero-grid   { flex-direction: column !important; }
+          .hide-desktop { display: flex !important; align-items: center; justify-content: center; }
+          .hero-grid   { flex-direction: column !important; padding: 2rem 4vw 2rem !important; gap: 2rem !important; }
           .feats-grid  { grid-template-columns: 1fr !important; }
           .stats-grid  { grid-template-columns: 1fr 1fr !important; }
+          .hero-section-mobile { padding: 2rem 4vw !important; }
+          .nav-inner { padding-left: 4vw !important; padding-right: 4vw !important; }
+          section { padding-left: 4vw !important; padding-right: 4vw !important; }
+        }
+        @media (max-width: 480px) {
+          .hero-grid { padding: 1.5rem 3vw 1.5rem !important; }
+          .hero-section-mobile { padding: 1.5rem 3vw !important; }
+        }
+        @media (min-width: 769px) {
+          .hide-desktop { display: none !important; }
+          .mobile-menu-dropdown { display: none !important; }
         }
       `}</style>
 
@@ -682,15 +696,17 @@ export default function LandingPage() {
           borderBottom: "1px solid #e0cfc0",
           padding: "0 5vw",
         }}
+        className="nav-inner"
       >
         <div
           style={{
             maxWidth: 1160,
             margin: "0 auto",
-            height: 64,
+            minHeight: 64,
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
+            flexWrap: "wrap",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -699,20 +715,15 @@ export default function LandingPage() {
                 width: 34,
                 height: 34,
                 borderRadius: 10,
+                overflow: "hidden",
+                flexShrink: 0,
                 background: "#85325c",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
               }}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
-                  fill="#f0eada"
-                  opacity="0.85"
-                />
-                <circle cx="12" cy="12" r="4" fill="#f0eada" />
-              </svg>
+              <Image src="/logo.png" alt="ArogyaMitra AI" width={34} height={34} className="object-contain" />
             </div>
             <span
               style={{
@@ -722,7 +733,7 @@ export default function LandingPage() {
                 color: "#3d1a2e",
               }}
             >
-              Sehat AI
+              ArogyaMitra AI
             </span>
             <span
               style={{
@@ -753,7 +764,13 @@ export default function LandingPage() {
             <button
               className="btn-cta"
               style={{ padding: "0.6rem 1.4rem", fontSize: "0.85rem" }}
-               onClick={() => router.push("/app")}
+              onClick={() => {
+                try {
+                  router.push("/app");
+                } catch {
+                  // ignore navigation errors
+                }
+              }}
             >
               Try Free
             </button>
@@ -767,12 +784,39 @@ export default function LandingPage() {
               cursor: "pointer",
               fontSize: "1.4rem",
               color: "#85325c",
+              padding: 8,
             }}
             aria-label="menu"
           >
-            ☰
+            {menuOpen ? "✕" : "☰"}
           </button>
         </div>
+        {/* Mobile menu dropdown */}
+        {menuOpen && (
+          <div
+            className="mobile-menu-dropdown"
+            style={{
+              width: "100%",
+              maxWidth: 1160,
+              margin: "0 auto",
+              padding: "0 5vw 1rem",
+              borderTop: "1px solid #e0cfc0",
+            }}
+          >
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", paddingTop: "0.75rem" }}>
+              <a href="#features" className="nav-link" style={{ padding: "0.6rem 0" }} onClick={() => setMenuOpen(false)}>Features</a>
+              <a href="#how" className="nav-link" style={{ padding: "0.6rem 0" }} onClick={() => setMenuOpen(false)}>How it works</a>
+              <a href="#impact" className="nav-link" style={{ padding: "0.6rem 0" }} onClick={() => setMenuOpen(false)}>Impact</a>
+              <button
+                className="btn-cta"
+                style={{ marginTop: "0.5rem", padding: "0.75rem 1.25rem", fontSize: "0.9rem", alignSelf: "flex-start" }}
+                onClick={() => { setMenuOpen(false); router.push("/app"); }}
+              >
+                Try Free
+              </button>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* ── Hero ── */}
@@ -786,9 +830,9 @@ export default function LandingPage() {
           gap: "3rem",
           flexWrap: "wrap",
         }}
-        className="hero-grid"
+        className="hero-grid hero-section-mobile"
       >
-        <div style={{ flex: "1 1 480px", minWidth: 0 }}>
+        <div style={{ flex: "1 1 280px", minWidth: 0 }}>
           <div
             className="hero-text"
             style={{
@@ -856,7 +900,12 @@ export default function LandingPage() {
               marginBottom: "2.5rem",
             }}
           >
-            <button className="btn-cta">अभी शुरू करें — Start Free</button>
+            <button
+              className="btn-cta"
+              onClick={() => router.push("/app")}
+            >
+              अभी शुरू करें — Start Free
+            </button>
             <button className="btn-outline">Watch demo →</button>
           </div>
           <div
@@ -1335,6 +1384,7 @@ export default function LandingPage() {
                 fontFamily: "var(--font-montserrat)",
                 transition: "all 0.2s",
               }}
+              onClick={() => router.push("/app")}
               onMouseOver={(e) => {
                 (e.currentTarget as HTMLButtonElement).style.background =
                   "#fff";
@@ -1395,20 +1445,15 @@ export default function LandingPage() {
               width: 28,
               height: 28,
               borderRadius: 8,
+              overflow: "hidden",
+              flexShrink: 0,
               background: "#85325c",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
-                fill="#f0eada"
-                opacity="0.8"
-              />
-              <circle cx="12" cy="12" r="4" fill="#f0eada" />
-            </svg>
+            <Image src="/logo.png" alt="ArogyaMitra AI" width={28} height={28} className="object-contain" />
           </div>
           <span
             style={{
@@ -1417,7 +1462,7 @@ export default function LandingPage() {
               fontWeight: 600,
             }}
           >
-            Sehat AI
+            ArogyaMitra AI
           </span>
         </div>
         <p style={{ fontSize: "0.82rem", color: "#8a6a7a" }}>
