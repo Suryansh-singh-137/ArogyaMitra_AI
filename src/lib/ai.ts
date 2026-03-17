@@ -8,7 +8,7 @@ const SYSTEM_PROMPT = `You are ArogyaMitra AI, a compassionate health assistant 
 Help people understand their symptoms and get basic guidance.
 Always respond in the language specified. Keep language simple and clear.
 Never use medical jargon. Always recommend seeing a real doctor for serious issues.
-Respond ONLY in valid JSON. No markdown, no backticks, no preamble.`;
+Respond ONLY in valid JSON. No markdown, no backticks, no preamble. Also suggest safe, low-cost generic medicines where possible.`;
 
 function buildPrompt(req: DiagnosisRequest): string {
   const ageMap = {
@@ -16,26 +16,48 @@ function buildPrompt(req: DiagnosisRequest): string {
     adult: "adult (13-60 years)",
     senior: "senior (60+ years)",
   };
+  const allergiesText =
+    req.allergies && req.allergies.length > 0
+      ? req.allergies.join(", ")
+      : "none known";
+
   return `Patient symptoms: ${req.symptoms.join(", ")}
 Age group: ${ageMap[req.age]}
 Language to respond in: ${req.language}
 Additional info: ${req.additionalInfo || "none"}
+Patient allergies (medicines/foods/other): ${allergiesText}
 
 Respond with this EXACT JSON structure and nothing else:
 {
   "condition": "name of likely condition in ${req.language}",
+  "possibleConditions": ["other possible condition 1 in ${req.language}", "other possible condition 2"],
   "severity": "mild",
   "description": "2-3 sentence explanation in ${req.language} in very simple words",
   "firstAid": ["step 1 in ${req.language}", "step 2", "step 3", "step 4"],
+  "homeCareAdvice": ["home care tip 1 in ${req.language}", "home care tip 2"],
   "medicines": [
     {
       "name": "medicine name in English",
       "dosage": "how much and when in ${req.language}",
       "note": "important note in ${req.language}",
-      "price": "approximate price in rupees e.g. ₹5-10"
+      "price": "approximate price in rupees e.g. ₹5-10",
+      "isGeneric": true,
+      "genericAlternatives": [
+        {
+          "name": "generic alternative name in English",
+          "price": "approximate price in rupees e.g. ₹3-5"
+        }
+      ]
     }
   ],
-  "whenToSeek": "when to visit a doctor, in ${req.language}"
+  "recommendedDoctor": "specialist to visit (e.g. General Physician, Ortho, Cardio) in ${req.language}",
+  "hospitalRecommendation": "brief advice on what type of hospital to visit in ${req.language}",
+  "dietRecommendation": ["diet recommendation 1 in ${req.language}", "diet recommendation 2"],
+  "lifestyleAndExercise": ["lifestyle advice 1 in ${req.language}", "exercise recommendation 1"],
+  "whenToSeek": "when to visit a doctor, in ${req.language}",
+  "allergyConflicts": [
+    "short warning in ${req.language} if any suggested medicine or advice is unsafe for the listed allergies, else empty array"
+  ]
 }
 
 Rules:
@@ -43,6 +65,8 @@ Rules:
 - Set "urgent" for: chest pain, difficulty breathing, high fever in infants, unconsciousness
 - Set "moderate" for: persistent fever 2+ days, severe pain, vomiting blood
 - Only suggest OTC medicines available at Jan Aushadhi stores under ₹50
+- For each medicine, also suggest 1–2 generic alternatives with approximate price in India when possible.
+- If patient allergies conflict with any medicine or advice, clearly flag it in "allergyConflicts" and offer safer alternatives.
 - Keep ALL text in ${req.language} except medicine names and JSON keys
 - Return ONLY the JSON object — no explanation, no markdown`;
 }
@@ -86,6 +110,55 @@ export async function callOpenRouter(
   const text: string = data.choices[0].message.content;
   const clean = text.replace(/```json|```/g, "").trim();
   return JSON.parse(clean) as Diagnosis;
+}
+
+// ── First-aid only call (simple JSON) ───────────────────────────────────────
+export async function callOpenRouterFirstAid(params: {
+  emergency: string;
+  language: Language;
+}): Promise<string[]> {
+  const apiKey = process.env.OPENROUTER_API_KEY;
+  if (!apiKey) throw new Error("OPENROUTER_API_KEY not set in .env.local");
+
+  const prompt = `Give step-by-step first aid for: ${params.emergency}
+Language: ${params.language}
+
+Rules:
+- Respond ONLY in valid JSON (no markdown).
+- Keep steps short, numbered, and easy for villagers to follow.
+- Provide 6 to 10 steps.
+- If it's life-threatening, include "Call 108" as one of the first steps.
+
+Return this EXACT JSON:
+{ "steps": ["step 1", "step 2", "step 3"] }`;
+
+  const response = await fetch(`${OPENROUTER_BASE}/chat/completions`, {
+    method: "POST",
+    headers: buildHeaders(apiKey),
+    body: JSON.stringify({
+      model: MODEL,
+      temperature: 0.2,
+      max_tokens: 700,
+      messages: [
+        { role: "system", content: SYSTEM_PROMPT },
+        { role: "user", content: prompt },
+      ],
+    }),
+  });
+
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(`OpenRouter API error ${response.status}: ${err}`);
+  }
+
+  const data = await response.json();
+  const text: string = data.choices[0].message.content;
+  const clean = text.replace(/```json|```/g, "").trim();
+  const parsed = JSON.parse(clean) as { steps?: unknown };
+  if (!Array.isArray(parsed.steps)) {
+    throw new Error("Invalid first-aid response");
+  }
+  return parsed.steps.filter((s) => typeof s === "string") as string[];
 }
 
 // ── Report analysis — Claude Sonnet supports vision via OpenRouter ────────────

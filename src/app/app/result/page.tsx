@@ -15,6 +15,11 @@ import {
   Hospital,
   Navigation,
   ChevronRight,
+  Stethoscope,
+  Activity,
+  Utensils,
+  Home,
+  List,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -57,7 +62,18 @@ export default function DiagnosisResult() {
 
   useEffect(() => {
     const raw = sessionStorage.getItem("sehat_diagnosis");
-    const l = (sessionStorage.getItem("sehat_lang") as Language) || "hi";
+    let l =
+      (sessionStorage.getItem("sehat_lang") as Language | null) || null;
+    if (!l) {
+      try {
+        const stored = localStorage.getItem("sehat_lang_default") as
+          | Language
+          | null;
+        l = stored || "hi";
+      } catch {
+        l = "hi";
+      }
+    }
     if (!raw) {
       router.push("/app");
       return;
@@ -217,6 +233,35 @@ export default function DiagnosisResult() {
           </div>
         </motion.div>
 
+        {/* Possible Conditions */}
+        {diagnosis.possibleConditions && diagnosis.possibleConditions.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+            className="rounded-2xl border bg-white p-4"
+            style={{ borderColor: "#e8d5c4" }}
+          >
+            <h3
+              className="font-bold text-base mb-3 flex items-center gap-2"
+              style={{ fontFamily: "var(--font-playfair)", color: "#3d1a2e" }}
+            >
+              <List size={18} style={{ color: "#85325c" }} /> {lang === "en" ? "Other Possible Conditions" : "अन्य संभावित स्थितियां"}
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {diagnosis.possibleConditions.map((cond, i) => (
+                <Badge
+                  key={i}
+                  variant="outline"
+                  className="bg-[#faf6f0] border-[#e8d5c4] text-[#4a2a3a]"
+                >
+                  {cond}
+                </Badge>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
         {/* First Aid */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -289,7 +334,7 @@ export default function DiagnosisResult() {
               {t(lang, "medicines")}
             </h3>
             <p className="text-xs mb-3" style={{ color: "#9a7a8a" }}>
-              Available at Jan Aushadhi stores
+              Generic-friendly options · Jan Aushadhi where possible
             </p>
             <div className="space-y-2.5">
               {diagnosis.medicines.map((med, i) => (
@@ -306,12 +351,22 @@ export default function DiagnosisResult() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
-                      <p
-                        className="font-semibold text-sm"
-                        style={{ color: "#3d1a2e" }}
-                      >
-                        {med.name}
-                      </p>
+                      <div className="space-y-0.5">
+                        <p
+                          className="font-semibold text-sm"
+                          style={{ color: "#3d1a2e" }}
+                        >
+                          {med.name}
+                        </p>
+                        {med.isGeneric && (
+                          <p
+                            className="text-[11px] font-medium"
+                            style={{ color: "#4a7a2a" }}
+                          >
+                            Generic medicine (Jan Aushadhi)
+                          </p>
+                        )}
+                      </div>
                       <Badge
                         variant="outline"
                         className="text-xs flex-shrink-0 border-[#e0c8d0]"
@@ -331,16 +386,183 @@ export default function DiagnosisResult() {
                         {med.note}
                       </p>
                     )}
+                    {med.genericAlternatives &&
+                      med.genericAlternatives.length > 0 && (
+                        <div className="mt-2 rounded-lg px-2.5 py-2 bg-white/70 border border-dashed border-[#e0c8d0]">
+                          <p
+                            className="text-[11px] font-semibold mb-1"
+                            style={{ color: "#85325c" }}
+                          >
+                            Generic alternatives (India)
+                          </p>
+                          <div className="space-y-1.5">
+                            {med.genericAlternatives.slice(0, 2).map(
+                              (alt, idx) => (
+                                <div
+                                  key={idx}
+                                  className="flex items-center justify-between gap-2"
+                                >
+                                  <p
+                                    className="text-xs"
+                                    style={{ color: "#4a2a3a" }}
+                                  >
+                                    {alt.name}
+                                  </p>
+                                  <span
+                                    className="text-[11px] font-medium"
+                                    style={{ color: "#6a4a5a" }}
+                                  >
+                                    {alt.price}
+                                  </span>
+                                </div>
+                              ),
+                            )}
+                          </div>
+                        </div>
+                      )}
                   </div>
                 </div>
               ))}
             </div>
+            {diagnosis.allergyConflicts &&
+              diagnosis.allergyConflicts.length > 0 && (
+                <div
+                  className="mt-3 p-2.5 rounded-lg flex gap-2 items-start"
+                  style={{ background: "#FCEBEB", border: "1px solid #F09595" }}
+                >
+                  <AlertTriangle
+                    size={14}
+                    className="flex-shrink-0 mt-0.5"
+                    style={{ color: "#A32D2D" }}
+                  />
+                  <div className="space-y-1">
+                    {diagnosis.allergyConflicts.map((msg, idx) => (
+                      <p
+                        key={idx}
+                        className="text-[11px] leading-snug"
+                        style={{ color: "#A32D2D" }}
+                      >
+                        {msg}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              )}
             <p
               className="text-[11px] mt-3 text-center italic"
               style={{ color: "#9a7a8a" }}
             >
               ⚠️ {t(lang, "disclaimer")}
             </p>
+          </motion.div>
+        )}
+
+        {/* Doctor & Hospital Recommendation */}
+        {(diagnosis.recommendedDoctor || diagnosis.hospitalRecommendation) && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.16 }}
+            className="rounded-2xl border bg-white p-4"
+            style={{ borderColor: "#e8d5c4", background: "#f8f0e8" }}
+          >
+             <h3
+              className="font-bold text-base mb-3 flex items-center gap-2"
+              style={{ fontFamily: "var(--font-playfair)", color: "#3d1a2e" }}
+            >
+              <Stethoscope size={18} style={{ color: "#85325c" }} /> {lang === "en" ? "Recommended Specialist" : "अनुशंसित विशेषज्ञ"}
+            </h3>
+            {diagnosis.recommendedDoctor && (
+              <div className="mb-2">
+                <p className="text-sm font-semibold" style={{ color: "#85325c" }}>{diagnosis.recommendedDoctor}</p>
+              </div>
+            )}
+            {diagnosis.hospitalRecommendation && (
+              <div className="flex gap-2 items-start mt-2">
+                <Hospital size={14} className="flex-shrink-0 mt-0.5" style={{ color: "#6a4a5a" }} />
+                <p className="text-xs leading-relaxed" style={{ color: "#6a4a5a" }}>
+                  {diagnosis.hospitalRecommendation}
+                </p>
+              </div>
+            )}
+          </motion.div>
+        )}
+
+        {/* Home Care Advice */}
+        {diagnosis.homeCareAdvice && diagnosis.homeCareAdvice.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.17 }}
+            className="rounded-2xl border bg-white p-4"
+            style={{ borderColor: "#e8d5c4" }}
+          >
+            <h3
+              className="font-bold text-base mb-3 flex items-center gap-2"
+              style={{ fontFamily: "var(--font-playfair)", color: "#3d1a2e" }}
+            >
+              <Home size={18} style={{ color: "#85325c" }} /> {lang === "en" ? "Home Care Advice" : "घरेलू देखभाल"}
+            </h3>
+            <ul className="space-y-2.5">
+              {diagnosis.homeCareAdvice.map((advice, i) => (
+                <li key={i} className="flex gap-3 items-start">
+                  <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: "#85325c" }} />
+                  <p className="text-sm leading-relaxed" style={{ color: "#4a2a3a" }}>{advice}</p>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+
+        {/* Diet Recommendation */}
+        {diagnosis.dietRecommendation && diagnosis.dietRecommendation.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.18 }}
+            className="rounded-2xl border bg-white p-4"
+            style={{ borderColor: "#e8d5c4" }}
+          >
+            <h3
+              className="font-bold text-base mb-3 flex items-center gap-2"
+              style={{ fontFamily: "var(--font-playfair)", color: "#3d1a2e" }}
+            >
+              <Utensils size={18} style={{ color: "#85325c" }} /> {lang === "en" ? "Diet Recommendation" : "आहार सलाह"}
+            </h3>
+            <ul className="space-y-2.5">
+              {diagnosis.dietRecommendation.map((item, i) => (
+                <li key={i} className="flex gap-3 items-start">
+                  <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: "#85325c" }} />
+                  <p className="text-sm leading-relaxed" style={{ color: "#4a2a3a" }}>{item}</p>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+
+        {/* Lifestyle & Exercise */}
+        {diagnosis.lifestyleAndExercise && diagnosis.lifestyleAndExercise.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.19 }}
+            className="rounded-2xl border bg-white p-4"
+            style={{ borderColor: "#e8d5c4" }}
+          >
+            <h3
+              className="font-bold text-base mb-3 flex items-center gap-2"
+              style={{ fontFamily: "var(--font-playfair)", color: "#3d1a2e" }}
+            >
+              <Activity size={18} style={{ color: "#85325c" }} /> {lang === "en" ? "Lifestyle & Exercise" : "जीवनशैली सलाह"}
+            </h3>
+            <ul className="space-y-2.5">
+              {diagnosis.lifestyleAndExercise.map((item, i) => (
+                <li key={i} className="flex gap-3 items-start">
+                  <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: "#85325c" }} />
+                  <p className="text-sm leading-relaxed" style={{ color: "#4a2a3a" }}>{item}</p>
+                </li>
+              ))}
+            </ul>
           </motion.div>
         )}
 

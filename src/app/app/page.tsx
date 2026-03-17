@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -18,6 +18,13 @@ import { SYMPTOMS } from "@/lib/conditions";
 import { getDiagnosis } from "@/lib/ai";
 import { t } from "@/lib/i18n";
 import type { Language, AgeGroup } from "@/types";
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalTrigger,
+  ModalFooter,
+} from "@/components/ui/animated-modal";
 
 const LANGUAGES: { code: Language; label: string; native: string }[] = [
   { code: "hi", label: "Hindi", native: "हिंदी" },
@@ -159,7 +166,18 @@ function extractSymptomsFromText(text: string): string[] {
 
 export default function SymptomChecker() {
   const router = useRouter();
-  const [lang, setLang] = useState<Language>("hi");
+  const [lang, setLang] = useState<Language>(() => {
+    if (typeof window === "undefined") return "hi";
+    try {
+      const stored = localStorage.getItem("sehat_lang_default") as
+        | Language
+        | null;
+      return stored || "hi";
+    } catch {
+      return "hi";
+    }
+  });
+  const [showLangModal, setShowLangModal] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [age, setAge] = useState<AgeGroup>("adult"); // default adult
   const [listening, setListening] = useState(false);
@@ -168,6 +186,18 @@ export default function SymptomChecker() {
   const [inputMode, setInputMode] = useState<"chips" | "text">("chips");
   const [voiceError, setVoiceError] = useState("");
   const recognitionRef = useRef<{ abort?: () => void } | null>(null);
+
+  // On first load, ask for preferred language across the app
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("sehat_lang_default") as
+        | Language
+        | null;
+      if (!stored) setShowLangModal(true);
+    } catch {
+      setShowLangModal(true);
+    }
+  }, []);
 
   const toggleSymptom = (id: string) => {
     setSelected((prev) => {
@@ -290,11 +320,28 @@ export default function SymptomChecker() {
       const symptomsArray =
         selected.size > 0 ? Array.from(selected) : ["general"]; // fallback so API doesn't get empty array
 
+      // Read saved allergies from localStorage to inject into the AI prompt
+      let allergies: string[] | undefined;
+      try {
+        const raw = localStorage.getItem("sehat_allergies");
+        if (raw) {
+          const parsed = JSON.parse(raw) as string[];
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            allergies = parsed.filter(
+              (a) => typeof a === "string" && a.trim().length > 0,
+            );
+          }
+        }
+      } catch {
+        allergies = undefined;
+      }
+
       const diagnosis = await getDiagnosis({
         symptoms: symptomsArray,
         age,
         language: lang,
         additionalInfo: textInput.trim() || undefined,
+        allergies,
       });
       sessionStorage.setItem("sehat_diagnosis", JSON.stringify(diagnosis));
       sessionStorage.setItem("sehat_lang", lang);
@@ -322,7 +369,7 @@ export default function SymptomChecker() {
             {t(lang, "selectSymptoms")}
           </h2>
           <p className="text-sm mt-1" style={{ color: "#8a6a7a" }}>
-            Type freely, speak, or tap chips — any one works
+            {t(lang, "typeFreelyHint")}
           </p>
         </motion.div>
 
@@ -343,7 +390,14 @@ export default function SymptomChecker() {
             {LANGUAGES.map((l) => (
               <button
                 key={l.code}
-                onClick={() => setLang(l.code)}
+                onClick={() => {
+                  setLang(l.code);
+                  try {
+                    localStorage.setItem("sehat_lang_default", l.code);
+                  } catch {
+                    // ignore
+                  }
+                }}
                 className={cn(
                   "px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 border",
                   lang === l.code
@@ -374,7 +428,7 @@ export default function SymptomChecker() {
               className="text-xs font-semibold uppercase tracking-wider"
               style={{ color: "#85325c" }}
             >
-              Describe your problem
+              {t(lang, "describeProblem")}
             </p>
             {/* mode toggle */}
             <div
@@ -392,7 +446,7 @@ export default function SymptomChecker() {
                       : { color: "#85325c" }
                   }
                 >
-                  {mode === "chips" ? "Chips" : "Free text"}
+                {mode === "chips" ? "Chips" : "Free text"}
                 </button>
               ))}
             </div>
@@ -569,12 +623,12 @@ export default function SymptomChecker() {
               transition={{ delay: 0.1 }}
               className="bg-white rounded-2xl border border-[#e8d5c4] p-4"
             >
-              <p
-                className="text-xs font-semibold mb-3 uppercase tracking-wider"
-                style={{ color: "#85325c" }}
-              >
-                Or tap symptoms
-              </p>
+        <p
+          className="text-xs font-semibold mb-3 uppercase tracking-wider"
+          style={{ color: "#85325c" }}
+        >
+          {t(lang, "orTapSymptoms")}
+        </p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {SYMPTOMS.map((symptom, i) => {
                   const isSelected = selected.has(symptom.id);
@@ -715,6 +769,69 @@ export default function SymptomChecker() {
           )}
         </AnimatePresence>
       </div>
+
+      {/* Global language selection modal on first app visit */}
+      {showLangModal && (
+        <Modal defaultOpen>
+          <ModalBody>
+            <ModalContent className="bg-white">
+              <h4
+                className="text-lg font-bold mb-1 text-center"
+                style={{ fontFamily: "var(--font-playfair)", color: "#3d1a2e" }}
+              >
+                स्वास्थ्य सहायक भाषा चुनें
+              </h4>
+              <p
+                className="text-xs text-center mb-4"
+                style={{ color: "#8a6a7a" }}
+              >
+                Choose app language for all screens
+              </p>
+              <div className="flex flex-wrap gap-2 justify-center">
+                {LANGUAGES.map((l) => (
+                  <button
+                    key={l.code}
+                    type="button"
+                    onClick={() => {
+                      setLang(l.code);
+                      try {
+                        localStorage.setItem("sehat_lang_default", l.code);
+                      } catch {
+                        // ignore
+                      }
+                      setShowLangModal(false);
+                    }}
+                    className={cn(
+                      "px-3 py-1.5 rounded-full text-sm font-medium border transition-all",
+                      lang === l.code
+                        ? "border-transparent text-white shadow-sm"
+                        : "bg-[#faf6f0] border-[#e0c8d0] hover:border-[#85325c]",
+                    )}
+                    style={
+                      lang === l.code
+                        ? { background: "#85325c", color: "#f0eada" }
+                        : { color: "#85325c" }
+                    }
+                  >
+                    {l.native}
+                  </button>
+                ))}
+              </div>
+              <ModalFooter className="justify-center mt-4 pt-3 border-t border-[#e8d5c4] gap-3">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 px-3 rounded-lg border-[#e0c8d0]"
+                  style={{ color: "#85325c" }}
+                  onClick={() => setShowLangModal(false)}
+                >
+                  Continue in default (हिंदी)
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </ModalBody>
+        </Modal>
+      )}
 
       {/* Sticky CTA */}
       <div

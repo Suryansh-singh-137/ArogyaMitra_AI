@@ -594,26 +594,26 @@ export default function LandingPage() {
     {
       delay: 0.2,
       icon: "💊",
-      title: "OTC medicine guide",
-      desc: "Safe over-the-counter medicines from your nearest Jan Aushadhi store, with dosage in Hindi. Always under ₹30.",
+      title: "Generic medicine guide",
+      desc: "Brand vs generic suggestions with 1–2 Jan Aushadhi alternatives and prices for India — right inside your diagnosis.",
     },
     {
       delay: 0.3,
-      icon: "📋",
-      title: "Report analyser",
-      desc: "Click a photo of your blood report or prescription. Get a clear explanation in simple Hindi within seconds.",
+      icon: "🚑",
+      title: "First Aid Guide",
+      desc: "Tap any of 20 emergencies like heart attack or snake bite and get step-by-step first aid in Hindi in seconds.",
     },
     {
       delay: 0.4,
-      icon: "📍",
-      title: "Nearest hospital",
-      desc: "GPS-based search finds your nearest PHC, government hospital, or clinic — with distance, hours, and directions.",
+      icon: "⚠️",
+      title: "Allergy-aware profile",
+      desc: "Save medicine and food allergies once. Every diagnosis prompt reminds AI to flag conflicts and suggest safer options.",
     },
     {
       delay: 0.5,
-      icon: "📵",
-      title: "Works offline",
-      desc: "No internet? No problem. 80+ common conditions are bundled locally. Works on 2G and in remote villages.",
+      icon: "📍",
+      title: "Hospitals & outbreaks",
+      desc: "Filter nearby hospitals by specialty via OpenStreetMap and stay updated on India-specific WHO disease outbreak alerts.",
     },
   ];
 
@@ -1091,7 +1091,27 @@ export default function LandingPage() {
           }}
         >
           {features.map((f, i) => (
-            <FeatureCard key={i} {...f} />
+            <button
+              key={i}
+              type="button"
+              onClick={() => {
+                if (f.title.startsWith("First Aid")) {
+                  router.push("/app/first-aid");
+                } else if (f.title.startsWith("Allergy")) {
+                  router.push("/app/profile");
+                } else if (f.title.startsWith("Hospitals")) {
+                  router.push("/app/hospitals");
+                } else if (f.title.includes("Report")) {
+                  router.push("/app/report");
+                } else {
+                  router.push("/app");
+                }
+              }}
+              style={{ textAlign: "left" }}
+              className="feat-card-hover"
+            >
+              <FeatureCard {...f} />
+            </button>
           ))}
         </div>
       </section>

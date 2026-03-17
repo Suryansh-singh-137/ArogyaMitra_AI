@@ -69,20 +69,21 @@ function getHospitalType(tags: Record<string, string>): string {
 async function fetchNearbyHospitals(
   lat: number,
   lon: number,
+  speciality?: string,
 ): Promise<Hospital[]> {
   const radius = 15000; // 15km
+  const specialityFilter = speciality
+    ? `["healthcare:speciality"~"${speciality}",i]`
+    : "";
   const query = `
     [out:json][timeout:25];
     (
-      node["amenity"="hospital"](around:${radius},${lat},${lon});
-      node["amenity"="clinic"](around:${radius},${lat},${lon});
-      node["amenity"="pharmacy"](around:${radius},${lat},${lon});
-      node["healthcare"="clinic"](around:${radius},${lat},${lon});
-      node["healthcare"="doctor"](around:${radius},${lat},${lon});
-      way["amenity"="hospital"](around:${radius},${lat},${lon});
-      way["amenity"="clinic"](around:${radius},${lat},${lon});
+      node["amenity"="hospital"]${specialityFilter}(around:${radius},${lat},${lon});
+      node["healthcare"="clinic"]${specialityFilter}(around:${radius},${lat},${lon});
+      node["healthcare"="doctor"]${specialityFilter}(around:${radius},${lat},${lon});
+      way["amenity"="hospital"]${specialityFilter}(around:${radius},${lat},${lon});
     );
-    out center 20;
+    out center 40;
   `;
 
   const res = await fetch("https://overpass-api.de/api/interpreter", {
@@ -120,7 +121,7 @@ async function fetchNearbyHospitals(
     })
     .filter(Boolean)
     .sort((a, b) => a!.distance - b!.distance)
-    .slice(0, 12) as Hospital[];
+    .slice(0, 20) as Hospital[];
 }
 
 const TYPE_COLORS: Record<string, { bg: string; text: string }> = {
@@ -141,22 +142,32 @@ export default function HospitalsPage() {
     null,
   );
   const [filter, setFilter] = useState<string>("All");
+  const [speciality, setSpeciality] = useState<string>("All");
   const [locating, setLocating] = useState(false);
 
-  const fetchHospitals = useCallback(async (lat: number, lon: number) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const results = await fetchNearbyHospitals(lat, lon);
-      setHospitals(results);
-      if (results.length === 0)
-        setError("No health facilities found within 15km.");
-    } catch {
-      setError("Could not fetch hospitals. Check your internet connection.");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const fetchHospitals = useCallback(
+    async (lat: number, lon: number, specialityOverride?: string) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const spec =
+          specialityOverride && specialityOverride !== "All"
+            ? specialityOverride
+            : speciality !== "All"
+              ? speciality
+              : undefined;
+        const results = await fetchNearbyHospitals(lat, lon, spec);
+        setHospitals(results);
+        if (results.length === 0)
+          setError("No health facilities found within 15km for this specialty.");
+      } catch {
+        setError("Could not fetch hospitals. Check your internet connection.");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [speciality],
+  );
 
   const getLocation = useCallback(() => {
     if (!navigator.geolocation) {
@@ -271,6 +282,51 @@ export default function HospitalsPage() {
           </div>
         </motion.div>
 
+        {/* Specialty chips */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.08 }}
+          className="bg-white rounded-2xl border border-[#e8d5c4] p-3"
+        >
+          <p
+            className="text-[11px] font-semibold mb-2 uppercase tracking-wider"
+            style={{ color: "#85325c" }}
+          >
+            Filter by specialty
+          </p>
+          <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+            {["All", "cardiology", "pediatrics", "orthopaedics", "gynecology", "general"].map(
+              (spec) => (
+                <button
+                  key={spec}
+                  onClick={() => {
+                    setSpeciality(spec);
+                    if (userLoc) {
+                      fetchHospitals(userLoc.lat, userLoc.lon, spec);
+                    }
+                  }}
+                  className={cn(
+                    "px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all border flex-shrink-0",
+                    speciality === spec
+                      ? "border-transparent text-white"
+                      : "bg-[#faf6f0] border-[#e0c8d0] hover:border-[#85325c]",
+                  )}
+                  style={
+                    speciality === spec
+                      ? { background: "#85325c", color: "#f0eada" }
+                      : { color: "#85325c" }
+                  }
+                >
+                  {spec === "All"
+                    ? "All specialties"
+                    : spec.charAt(0).toUpperCase() + spec.slice(1)}
+                </button>
+              ),
+            )}
+          </div>
+        </motion.div>
+
         {/* Error */}
         <AnimatePresence>
           {error && (
@@ -359,6 +415,41 @@ export default function HospitalsPage() {
                   : `(${hospitals.filter((h) => h.type === type).length})`}
               </button>
             ))}
+          </motion.div>
+        )}
+
+        {/* Interactive Map */}
+        {!loading && userLoc && hospitals.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="w-full h-48 md:h-64 rounded-2xl overflow-hidden border relative z-10"
+            style={{ borderColor: "#e8d5c4" }}
+          >
+            <iframe
+              width="100%"
+              height="100%"
+              frameBorder="0"
+              scrolling="no"
+              marginHeight={0}
+              marginWidth={0}
+              src={`https://www.openstreetmap.org/export/embed.html?bbox=${userLoc.lon - 0.05}%2C${userLoc.lat - 0.05}%2C${userLoc.lon + 0.05}%2C${userLoc.lat + 0.05}&layer=mapnik&marker=${userLoc.lat}%2C${userLoc.lon}`}
+              style={{ border: 0 }}
+            />
+            <div 
+              className="absolute top-2 right-2 px-2 py-1 rounded text-[10px] shadow-sm font-semibold pointer-events-none" 
+              style={{ background: "rgba(255,255,255,0.9)", color: "#85325c" }}
+            >
+              Your Location
+            </div>
+            <a 
+              href={`https://www.openstreetmap.org/?mlat=${userLoc.lat}&mlon=${userLoc.lon}#map=13/${userLoc.lat}/${userLoc.lon}`} 
+              target="_blank" 
+              className="absolute bottom-1 left-2 text-[9px] underline pointer-events-auto"
+              style={{ color: "#3d1a2e", background: "rgba(255,255,255,0.7)", padding: "2px 4px", borderRadius: "4px" }}
+            >
+              View Larger Map
+            </a>
           </motion.div>
         )}
 

@@ -15,6 +15,8 @@ import {
   WifiOff,
   ChevronRight,
   Phone,
+  Sparkles,
+  AlertTriangle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -46,6 +48,27 @@ const NAV_ITEMS = [
     label: "My History",
     labelHi: "मेरा इतिहास",
     desc: "Past diagnoses",
+  },
+  {
+    href: "/app/first-aid",
+    icon: Sparkles,
+    label: "First Aid Guide",
+    labelHi: "प्राथमिक उपचार",
+    desc: "20 emergencies in Hindi",
+  },
+  {
+    href: "/app/profile",
+    icon: AlertTriangle,
+    label: "Allergy Profile",
+    labelHi: "एलर्जी प्रोफ़ाइल",
+    desc: "Safer medicine suggestions",
+  },
+  {
+    href: "/app/outbreaks",
+    icon: AlertTriangle,
+    label: "Outbreak Alerts",
+    labelHi: "रोग अलर्ट (WHO)",
+    desc: "Latest India disease news",
   },
 ];
 

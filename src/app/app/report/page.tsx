@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Upload,
@@ -64,7 +64,17 @@ async function compressImage(
 }
 
 export default function ReportAnalyser() {
-  const [lang, setLang] = useState<Language>("hi");
+  const [lang, setLang] = useState<Language>(() => {
+    if (typeof window === "undefined") return "hi";
+    try {
+      const stored = localStorage.getItem("sehat_lang_default") as
+        | Language
+        | null;
+      return stored || "hi";
+    } catch {
+      return "hi";
+    }
+  });
   const [imageData, setImageData] = useState<{
     base64: string;
     mediaType: string;
@@ -77,6 +87,17 @@ export default function ReportAnalyser() {
   const [copied, setCopied] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("sehat_lang_default") as
+        | Language
+        | null;
+      if (stored) setLang(stored);
+    } catch {
+      // ignore
+    }
+  }, []);
 
   const handleFile = async (file: File) => {
     if (!file.type.startsWith("image/")) {
@@ -209,7 +230,14 @@ export default function ReportAnalyser() {
             {LANGUAGES.map((l) => (
               <button
                 key={l.code}
-                onClick={() => setLang(l.code)}
+                onClick={() => {
+                  setLang(l.code);
+                  try {
+                    localStorage.setItem("sehat_lang_default", l.code);
+                  } catch {
+                    // ignore
+                  }
+                }}
                 className={cn(
                   "px-3 py-1.5 rounded-full text-sm font-medium transition-all border",
                   lang === l.code

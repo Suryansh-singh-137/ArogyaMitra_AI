@@ -10,11 +10,19 @@ export interface Symptom {
 
 export interface Diagnosis {
   condition: string;
+  possibleConditions: string[];
   severity: Severity;
   description: string;
   firstAid: string[];
+  homeCareAdvice: string[];
   medicines: Medicine[];
+  recommendedDoctor: string;
+  hospitalRecommendation: string;
+  dietRecommendation: string[];
+  lifestyleAndExercise: string[];
   whenToSeek: string;
+  // Optional flags from AI about allergy conflicts
+  allergyConflicts?: string[];
 }
 
 export interface Medicine {
@@ -22,6 +30,13 @@ export interface Medicine {
   dosage: string;
   note: string;
   price: string;
+  // Whether this is a generic (Jan Aushadhi) option
+  isGeneric?: boolean;
+  // 1–2 generic alternatives for this medicine with approximate prices in India
+  genericAlternatives?: {
+    name: string;
+    price: string;
+  }[];
 }
 
 // Used in hospitals page (real GPS — distance as number)
@@ -42,6 +57,8 @@ export interface DiagnosisRequest {
   age: AgeGroup;
   language: Language;
   additionalInfo?: string;
+  // Optional patient allergies injected into the AI prompt
+  allergies?: string[];
 }
 
 export interface HistoryEntry {

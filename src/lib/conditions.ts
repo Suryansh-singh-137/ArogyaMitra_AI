@@ -154,6 +154,12 @@ type OfflineCondition = {
   firstAid: Record<Language, string[]>;
   medicines: { name: string; dosage: string; note: string; price: string }[];
   whenToSeek: Record<Language, string>;
+  possibleConditions: Record<Language, string[]>;
+  homeCareAdvice: Record<Language, string[]>;
+  recommendedDoctor: Record<Language, string>;
+  hospitalRecommendation: Record<Language, string>;
+  dietRecommendation: Record<Language, string[]>;
+  lifestyleAndExercise: Record<Language, string[]>;
 };
 
 export const OFFLINE_CONDITIONS: Record<string, OfflineCondition> = {
@@ -235,6 +241,40 @@ export const OFFLINE_CONDITIONS: Record<string, OfflineCondition> = {
       mr: "3 दिवसात ताप न उतरल्यास किंवा 103°F पेक्षा जास्त असल्यास डॉक्टरांकडे जा.",
       en: "See a doctor if fever doesn't reduce in 3 days or exceeds 103°F.",
     },
+    possibleConditions: {
+      hi: ["सामान्य सर्दी", "फ्लू"],
+      bn: ["সাধারণ ঠান্ডা", "ফ্লু"],
+      ta: ["சாதாரண சளி", "காய்ச்சல்"],
+      te: ["సాధారణ జలుబు", "ఫ్లూ"],
+      mr: ["सामान्य सर्दी", "फ्लू"],
+      en: ["Common Cold", "Flu"],
+    },
+    homeCareAdvice: {
+      hi: ["आराम करें", "गर्म पानी पिएं"],
+      bn: ["বিশ্রাম নিন", "গরম জল পান করুন"],
+      ta: ["ஓய்வெடுக்கவும்", "சூடான நீர் குடிக்கவும்"],
+      te: ["విశ్రాంతి తీసుకోండి", "వేడి నీరు త్రాగాలి"],
+      mr: ["विश्रांती घ्या", "गरम पाणी प्या"],
+      en: ["Get adequate rest", "Drink warm fluids"],
+    },
+    recommendedDoctor: { hi: "सामान्य चिकित्सक", bn: "সাধারণ চিকিৎসক", ta: "பொது மருத்துவர்", te: "సాధారణ వైద్యుడు", mr: "सामान्य चिकित्सक", en: "General Physician" },
+    hospitalRecommendation: { hi: "निकटतम स्वास्थ्य केंद्र", bn: "নিকটস্থ স্বাস্থ্য কেন্দ্র", ta: "அருகிலுள்ள சுகாதார மையம்", te: "సమీప ఆరోగ్య కేంద్రం", mr: "जवळचे आरोग्य केंद्र", en: "Nearest Health Center or Clinic" },
+    dietRecommendation: {
+      hi: ["हल्का भोजन लें", "खूब पानी पिएं"],
+      bn: ["হালকা খাবার খান", "প্রচুর জল পান করুন"],
+      ta: ["மெல்லிய உணவு உண்ணவும்", "நிறைய தண்ணீர் குடிக்கவும்"],
+      te: ["తేలికపాటి ఆహారం తీసుకోండి", "చాలా నీరు త్రాగాలి"],
+      mr: ["हलके अन्न खा", "भरपूर पाणी प्या"],
+      en: ["Eat light meals like porridge", "Stay hydrated"],
+    },
+    lifestyleAndExercise: {
+      hi: ["ठंड से बचें", "भारी व्यायाम न करें"],
+      bn: ["ঠান্ডা এড়িয়ে চলুন", "ভারী ব্যায়াম করবেন না"],
+      ta: ["குளிரைத் தவிர்க்கவும்", "கடினமான உடற்பயிற்சி வேண்டாம்"],
+      te: ["చలి నుండి దూరంగా ఉండండి", "భారీ వ్యాయామం చేయవద్దు"],
+      mr: ["थंडी टाळा", "जड व्यायाम करू नका"],
+      en: ["Avoid cold exposure", "Avoid heavy physical exertion"],
+    },
   },
 
   chest: {
@@ -301,6 +341,40 @@ export const OFFLINE_CONDITIONS: Record<string, OfflineCondition> = {
       te: "వెంటనే అత్యవసర సేవను సంప్రదించండి.",
       mr: "ताबडतोब आपत्कालीन सेवेशी संपर्क साधा.",
       en: "Contact emergency services immediately.",
+    },
+    possibleConditions: {
+      hi: ["हृदय की समस्या", "एसिडिटी"],
+      bn: ["হৃদরোগ", "অ্যাসিডিটি"],
+      ta: ["இதய பிரச்சினை", "இரைப்பை அழற்சி"],
+      te: ["గుండె సమస్య", "ఎసిడిటీ"],
+      mr: ["हृदयविकार", "अॅसिडिटी"],
+      en: ["Heart issue", "Severe Acidity"],
+    },
+    homeCareAdvice: {
+      hi: ["हिलें डुलें नहीं", "शांत रहें"],
+      bn: ["নড়াচড়া করবেন না", "শান্ত থাকুন"],
+      ta: ["நகரவோ அசையவோ வேண்டாம்", "அமைதியாக இருங்கள்"],
+      te: ["కదలకుండా ఉండండి", "ప్రశాంతంగా ఉండండి"],
+      mr: ["हालचाल करू नका", "शांत राहा"],
+      en: ["Do not move around", "Stay completely calm"],
+    },
+    recommendedDoctor: { hi: "हृदय रोग विशेषज्ञ", bn: "হৃদরোগ বিশেষজ্ঞ", ta: "இதய மருத்துவர்", te: "గుండె వైద్యుడు", mr: "हृदयविकार तज्ज्ञ", en: "Cardiologist (ER)" },
+    hospitalRecommendation: { hi: "बड़े अस्पताल की आपातकालीन", bn: "বড় হাসপাতালের জরুরি বিভাগ", ta: "பெரிய மருத்துவமனை அவசரம்", te: "పెద్ద ఆసుపత్రి ఎమర్జెన్సీ", mr: "मोठ्या रुग्णालयातील आपत्कालीन", en: "Large Hospital Emergency Room" },
+    dietRecommendation: {
+      hi: ["कुछ न खाएं-पिएं"],
+      bn: ["কিছু খাবেন বা পান করবেন না"],
+      ta: ["எதுவும் சாப்பிடவோ குடிக்கவோ வேண்டாம்"],
+      te: ["ఏమీ తినకూడదు త్రాగకూడదు"],
+      mr: ["काहीही खाऊ किंवा पिऊ नका"],
+      en: ["Do not consume anything right now"],
+    },
+    lifestyleAndExercise: {
+      hi: ["पूर्ण आराम"],
+      bn: ["পূর্ণ বিশ্রাম"],
+      ta: ["முழுமையான ஓய்வு"],
+      te: ["సంపూర్ణ విశ్రాంతి"],
+      mr: ["पूर्ण विश्रांती"],
+      en: ["Absolute rest right now"],
     },
   },
 
@@ -382,6 +456,40 @@ export const OFFLINE_CONDITIONS: Record<string, OfflineCondition> = {
       mr: "2 दिवसात बरे न झाल्यास, रक्त आल्यास किंवा मूल असल्यास — ताबडतोब डॉक्टरांकडे जा.",
       en: "See doctor if not better in 2 days, blood in stool, or if it's a child.",
     },
+    possibleConditions: {
+      hi: ["फ़ूड पॉइज़निंग", "पेट का संक्रमण"],
+      bn: ["ফুড পয়জনিং", "পেটের সংক্রমণ"],
+      ta: ["உணவு விஷம்", "இரைப்பை தொற்று"],
+      te: ["ఫుడ్ పాయిజనింగ్", "కడుపు ఇన్ఫెక్షన్"],
+      mr: ["अन्नविषबाधा", "पोटाचा संसर्ग"],
+      en: ["Food Poisoning", "Stomach Infection"],
+    },
+    homeCareAdvice: {
+      hi: ["ORS पीते रहें", "साफ-सफाई रखें"],
+      bn: ["ORS পান করতে থাকুন", "পরিষ্কার-পরিচ্ছন্নতা বজায় রাখুন"],
+      ta: ["ORS குடிக்கவும்", "சுத்தமாக இருக்கவும்"],
+      te: ["ORS తాగుతూ ఉండండి", "పరిశుభ్రత పాటించండి"],
+      mr: ["ORS पीत राहा", "स्वच्छता राखा"],
+      en: ["Sip ORS continuously", "Maintain good hygiene"],
+    },
+    recommendedDoctor: { hi: "सामान्य चिकित्सक", bn: "সাধারণ চিকিৎসক", ta: "பொது மருத்துவர்", te: "సాధారణ వైద్యుడు", mr: "सामान्य चिकित्सक", en: "General Physician" },
+    hospitalRecommendation: { hi: "निकटतम क्लिनिक", bn: "নিকটস্থ ক্লিনিক", ta: "அருகிலுள்ள கிளினிக்", te: "సమీప క్లినిక్", mr: "जवळचे क्लिनिक", en: "Nearest Clinic" },
+    dietRecommendation: {
+      hi: ["खिचड़ी", "दही"],
+      bn: ["খিচুড়ি", "দই"],
+      ta: ["கஞ்சி", "தயிர்"],
+      te: ["కిచిడి", "పెరుగు"],
+      mr: ["खिचडी", "दही"],
+      en: ["Khichdi (Rice/Lentils)", "Yogurt/Curd"],
+    },
+    lifestyleAndExercise: {
+      hi: ["आराम करें"],
+      bn: ["বিশ্রাম নিন"],
+      ta: ["ஓய்வெடுக்கவும்"],
+      te: ["విశ్రాంతి తీసుకోండి"],
+      mr: ["विश्रांती घ्या"],
+      en: ["Rest at home"],
+    },
   },
 
   default: {
@@ -456,6 +564,40 @@ export const OFFLINE_CONDITIONS: Record<string, OfflineCondition> = {
       mr: "2 दिवसात बरे न झाल्यास डॉक्टरांकडे जा.",
       en: "See a doctor if not better in 2 days.",
     },
+    possibleConditions: {
+      hi: ["थकान", "तनाव"],
+      bn: ["ক্লান্তি", "মানসিক চাপ"],
+      ta: ["சோர்வு", "மனஅழுத்தம்"],
+      te: ["అలసట", "ఒత్తిడి"],
+      mr: ["थकवा", "तणाव"],
+      en: ["Fatigue", "Stress"],
+    },
+    homeCareAdvice: {
+      hi: ["आराम करें", "नींद पूरी लें"],
+      bn: ["বিশ্রাম নিন", "পর্যাপ্ত ঘুমান"],
+      ta: ["ஓய்வெடுக்கவும்", "நன்கு தூங்கவும்"],
+      te: ["విశ్రాంతి తీసుకోండి", "బాగా నిద్రపోండి"],
+      mr: ["विश्रांती घ्या", "पुरेशी झोप घ्या"],
+      en: ["Take a rest", "Get enough sleep"],
+    },
+    recommendedDoctor: { hi: "सामान्य चिकित्सक", bn: "সাধারণ চিকিৎসক", ta: "பொது மருத்துவர்", te: "సాధారణ వైద్యుడు", mr: "सामान्य चिकित्सक", en: "General Physician" },
+    hospitalRecommendation: { hi: "निकटतम स्वास्थ्य केंद्र", bn: "নিকটস্থ স্বাস্থ্য কেন্দ্র", ta: "அருகிலுள்ள சுகாதார மையம்", te: "సమీప ఆరోగ్య కేంద్రం", mr: "जवळचे आरोग्य केंद्र", en: "Nearest Health Center or Clinic" },
+    dietRecommendation: {
+      hi: ["संतुलित आहार लें"],
+      bn: ["সুষম খাবার খান"],
+      ta: ["சமச்சீரான உணவு உண்ணவும்"],
+      te: ["సమతుల్య ఆహారం తీసుకోండి"],
+      mr: ["संतुलित आहार घ्या"],
+      en: ["Eat a balanced diet"],
+    },
+    lifestyleAndExercise: {
+      hi: ["हल्का टहलें", "योग करें"],
+      bn: ["হালকা হাঁটুন", "যোগব্যায়াম করুন"],
+      ta: ["லேசாக நடக்கவும்", "யோகா செய்யவும்"],
+      te: ["తేలికగా నడవండి", "యోగా చేయండి"],
+      mr: ["हलके चाला", "योग करा"],
+      en: ["Take light walks", "Do light stretching/yoga"],
+    },
   },
 };
 
@@ -478,5 +620,11 @@ export function getOfflineDiagnosis(
     firstAid: c.firstAid[language] || c.firstAid.en,
     medicines: c.medicines,
     whenToSeek: c.whenToSeek[language] || c.whenToSeek.en,
+    possibleConditions: c.possibleConditions[language] || c.possibleConditions.en,
+    homeCareAdvice: c.homeCareAdvice[language] || c.homeCareAdvice.en,
+    recommendedDoctor: c.recommendedDoctor[language] || c.recommendedDoctor.en,
+    hospitalRecommendation: c.hospitalRecommendation[language] || c.hospitalRecommendation.en,
+    dietRecommendation: c.dietRecommendation[language] || c.dietRecommendation.en,
+    lifestyleAndExercise: c.lifestyleAndExercise[language] || c.lifestyleAndExercise.en,
   };
 }
