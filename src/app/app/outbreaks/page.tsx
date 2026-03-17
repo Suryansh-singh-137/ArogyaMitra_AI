@@ -44,23 +44,102 @@ export default async function OutbreaksPage() {
         )}
 
         {!error && outbreaks.length === 0 && (
-          <div className="text-center py-16">
-            <div
-              className="w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center"
-              style={{ background: "#85325c15" }}
-            >
-              <AlertTriangle size={28} style={{ color: "#85325c" }} />
+          <>
+            <div className="text-center py-10">
+              <div
+                className="w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center"
+                style={{ background: "#85325c15" }}
+              >
+                <AlertTriangle size={28} style={{ color: "#85325c" }} />
+              </div>
+              <p
+                className="font-semibold mb-1"
+                style={{ fontFamily: "var(--font-playfair)", color: "#3d1a2e" }}
+              >
+                No recent India-specific alerts
+              </p>
+              <p className="text-sm" style={{ color: "#8a6a7a" }}>
+                वर्तमान में WHO Disease Outbreak News में India का कोई सक्रिय अपडेट नहीं दिख रहा। 
+              </p>
             </div>
-            <p
-              className="font-semibold mb-1"
-              style={{ fontFamily: "var(--font-playfair)", color: "#3d1a2e" }}
-            >
-              No recent India-specific alerts
-            </p>
-            <p className="text-sm" style={{ color: "#8a6a7a" }}>
-              वर्तमान में WHO Disease Outbreak News में India का कोई सक्रिय अपडेट नहीं दिख रहा।
-            </p>
-          </div>
+            
+            {/* Past Major Outbreaks Fallback */}
+            <div>
+              <h3 
+                className="font-bold text-lg mb-3 mt-4 flex items-center gap-2"
+                style={{ fontFamily: "var(--font-playfair)", color: "#3d1a2e" }}
+              >
+                Past Major Outbreaks (India)
+              </h3>
+              <div className="space-y-3">
+                {[
+                  {
+                    title: "Nipah Virus Outbreak - Kerala",
+                    date: "September 2023",
+                    desc: "An outbreak of Nipah virus was reported in Kerala, India. Containment zones were established and close contacts were isolated to prevent further transmission. The virus is primarily transmitted by fruit bats.",
+                    link: "https://www.who.int/emergencies/disease-outbreak-news/item/2023-DON490"
+                  },
+                  {
+                    title: "COVID-19 Pandemic - Nationwide",
+                    date: "2020 - 2023",
+                    desc: "A massive nationwide outbreak of SARS-CoV-2 causing severe respiratory illness. Multiple waves affected the country, leading to nationwide vaccination drives and massive public health interventions.",
+                    link: "https://www.who.int/emergencies/diseases/novel-coronavirus-2019"
+                  },
+                  {
+                    title: "Zika Virus - Multiple States",
+                    date: "October 2021",
+                    desc: "Cases of Zika virus disease were reported in Uttar Pradesh, Kerala, and Maharashtra. Intensive vector control measures and fever surveillance were activated across affected regions.",
+                    link: "https://www.who.int/emergencies/disease-outbreak-news/item/zika-virus-disease---india"
+                  }
+                ].map((past, i) => (
+                  <article
+                    key={i}
+                    className="bg-[#faf6f0] rounded-2xl border border-[#e8d5c4] p-4 opacity-90"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <h3
+                        className="text-sm font-semibold leading-snug"
+                        style={{
+                          fontFamily: "var(--font-playfair)",
+                          color: "#3d1a2e",
+                        }}
+                      >
+                        {past.title}
+                      </h3>
+                      <span
+                        className="flex items-center gap-1 text-[11px] flex-shrink-0 font-medium"
+                        style={{ color: "#8a6a7a" }}
+                      >
+                        <CalendarDays size={11} />
+                        {past.date}
+                      </span>
+                    </div>
+                    <p
+                      className="text-xs mt-2"
+                      style={{ color: "#6a4a5a" }}
+                    >
+                      {past.desc}
+                    </p>
+                    <div className="flex justify-end mt-3 pt-2 border-t border-[#f0e8e0]">
+                      <a
+                        href={past.link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium border transition hover:border-[#85325c]"
+                        style={{
+                          borderColor: "#e0c8d0",
+                          color: "#85325c",
+                        }}
+                      >
+                        Read Historical Update
+                        <ExternalLink size={11} />
+                      </a>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </>
         )}
 
         {outbreaks.length > 0 && (
