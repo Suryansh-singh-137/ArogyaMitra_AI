@@ -357,18 +357,18 @@ export default function SymptomChecker() {
 
   return (
     <div className="min-h-screen" style={{ background: "#f0eada" }}>
-      <div className="max-w-2xl mx-auto px-4 py-6 pb-32 space-y-5">
+      <div className="max-w-2xl mx-auto px-4 md:px-6 py-4 md:py-6 pb-32 md:pb-40 space-y-5">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
         >
           <h2
-            className="text-2xl font-bold"
+            className="text-xl md:text-2xl font-bold"
             style={{ fontFamily: "var(--font-playfair)", color: "#3d1a2e" }}
           >
             {t(lang, "selectSymptoms")}
           </h2>
-          <p className="text-sm mt-1" style={{ color: "#8a6a7a" }}>
+          <p className="text-xs md:text-sm mt-1" style={{ color: "#8a6a7a" }}>
             {t(lang, "typeFreelyHint")}
           </p>
         </motion.div>
@@ -378,15 +378,15 @@ export default function SymptomChecker() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
-          className="bg-white rounded-2xl border border-[#e8d5c4] p-4"
+          className="bg-white rounded-2xl border border-[#e8d5c4] p-3 md:p-4"
         >
           <p
-            className="text-xs font-semibold mb-3 uppercase tracking-wider"
+            className="text-[11px] md:text-xs font-semibold mb-2.5 md:mb-3 uppercase tracking-wider"
             style={{ color: "#85325c" }}
           >
             Language / भाषा
           </p>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 md:gap-2">
             {LANGUAGES.map((l) => (
               <button
                 key={l.code}
@@ -399,7 +399,7 @@ export default function SymptomChecker() {
                   }
                 }}
                 className={cn(
-                  "px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 border",
+                  "px-2.5 md:px-3 py-1.5 rounded-full text-xs md:text-sm font-medium transition-all duration-200 border min-h-[32px]",
                   lang === l.code
                     ? "border-transparent text-white shadow-sm"
                     : "bg-[#faf6f0] border-[#e0c8d0] hover:border-[#85325c]",
@@ -421,25 +421,25 @@ export default function SymptomChecker() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.07 }}
-          className="bg-white rounded-2xl border border-[#e8d5c4] p-4 space-y-3"
+          className="bg-white rounded-2xl border border-[#e8d5c4] p-3 md:p-4 space-y-3"
         >
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-2">
             <p
-              className="text-xs font-semibold uppercase tracking-wider"
+              className="text-[11px] md:text-xs font-semibold uppercase tracking-wider"
               style={{ color: "#85325c" }}
             >
               {t(lang, "describeProblem")}
             </p>
             {/* mode toggle */}
             <div
-              className="flex rounded-lg p-0.5"
+              className="flex rounded-lg p-0.5 flex-shrink-0"
               style={{ background: "#f0eada", border: "1px solid #e0c8d0" }}
             >
               {(["chips", "text"] as const).map((mode) => (
                 <button
                   key={mode}
                   onClick={() => setInputMode(mode)}
-                  className="px-3 py-1 rounded-md text-xs font-medium transition-all"
+                  className="px-2 md:px-3 py-1 rounded-md text-[10px] md:text-xs font-medium transition-all whitespace-nowrap"
                   style={
                     inputMode === mode
                       ? { background: "#85325c", color: "#f0eada" }
@@ -474,15 +474,15 @@ export default function SymptomChecker() {
                         ? "మీ సమస్యను వివరించండి..."
                         : "Describe your problem freely... e.g. fever and headache"
               }
-              className="pr-24 resize-none text-sm rounded-xl border-[#e8d5c4] focus-visible:ring-[#85325c]/30"
-              style={{ minHeight: 90, background: "#faf6f0", color: "#3d1a2e" }}
+              className="pr-20 md:pr-24 resize-none text-xs md:text-sm rounded-xl border-[#e8d5c4] focus-visible:ring-[#85325c]/30"
+              style={{ minHeight: 85, background: "#faf6f0", color: "#3d1a2e" }}
               rows={3}
             />
-            <div className="absolute right-2 bottom-2 flex gap-1.5">
+            <div className="absolute right-2 bottom-2 flex gap-1">
               {textInput && (
                 <button
                   onClick={() => setTextInput("")}
-                  className="w-7 h-7 rounded-lg flex items-center justify-center hover:opacity-80"
+                  className="w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center hover:opacity-80 flex-shrink-0"
                   style={{ background: "#e8d5c4" }}
                 >
                   <X size={12} style={{ color: "#85325c" }} />
@@ -496,8 +496,10 @@ export default function SymptomChecker() {
                 }}
                 aria-label={t(lang, "voicePrompt")}
                 className={cn(
-                  "w-8 h-8 rounded-lg flex items-center justify-center transition-all touch-manipulation",
-                  listening ? "cursor-not-allowed" : "hover:opacity-80",
+                  "w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center transition-all touch-manipulation flex-shrink-0",
+                  listening
+                    ? "cursor-not-allowed"
+                    : "hover:opacity-80 active:opacity-75",
                 )}
                 style={{ background: listening ? "#85325c" : "#e8d5c4" }}
                 title={listening ? "Listening..." : t(lang, "voicePrompt")}
@@ -517,7 +519,7 @@ export default function SymptomChecker() {
               <button
                 onClick={handleTextSubmit}
                 disabled={!textInput.trim()}
-                className="w-8 h-8 rounded-lg flex items-center justify-center hover:opacity-80 disabled:opacity-40"
+                className="w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center hover:opacity-80 disabled:opacity-40 active:opacity-75 flex-shrink-0"
                 style={{ background: "#85325c" }}
                 title="Extract symptoms from text"
               >
@@ -526,7 +528,10 @@ export default function SymptomChecker() {
             </div>
           </div>
 
-          <p className="text-[11px] mt-1.5" style={{ color: "#8a6a7a" }}>
+          <p
+            className="text-[10px] md:text-[11px] mt-1.5"
+            style={{ color: "#8a6a7a" }}
+          >
             Voice works in Chrome — tap the mic to speak, or type above.
           </p>
 
@@ -623,10 +628,10 @@ export default function SymptomChecker() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-white rounded-2xl border border-[#e8d5c4] p-4"
+              className="bg-white rounded-2xl border border-[#e8d5c4] p-3 md:p-4"
             >
               <p
-                className="text-xs font-semibold mb-3 uppercase tracking-wider"
+                className="text-[11px] md:text-xs font-semibold mb-2.5 md:mb-3 uppercase tracking-wider"
                 style={{ color: "#85325c" }}
               >
                 {t(lang, "orTapSymptoms")}
@@ -642,7 +647,7 @@ export default function SymptomChecker() {
                       transition={{ delay: i * 0.025 }}
                       onClick={() => toggleSymptom(symptom.id)}
                       className={cn(
-                        "flex items-center gap-2 p-3 rounded-xl border text-left transition-all duration-200 relative overflow-hidden",
+                        "flex items-center gap-2 p-2.5 md:p-3 rounded-xl border text-left transition-all duration-200 relative overflow-hidden min-h-[44px] md:min-h-auto active:opacity-75",
                         isSelected
                           ? "border-[#85325c]"
                           : "bg-[#faf6f0] border-[#e8d5c4] hover:border-[#85325c]/50",
@@ -661,18 +666,18 @@ export default function SymptomChecker() {
                           style={{ background: "#85325c0d" }}
                         />
                       )}
-                      <span className="text-lg relative z-10">
+                      <span className="text-base md:text-lg relative z-10 flex-shrink-0">
                         {symptom.emoji}
                       </span>
                       <span
-                        className="text-xs font-medium relative z-10 leading-tight"
+                        className="text-[10px] md:text-xs font-medium relative z-10 leading-tight"
                         style={{ color: isSelected ? "#85325c" : "#3d1a2e" }}
                       >
                         {symptom.labels[lang]}
                       </span>
                       {isSelected && (
                         <motion.div
-                          className="absolute top-1.5 right-1.5 w-3.5 h-3.5 rounded-full flex items-center justify-center"
+                          className="absolute top-1.5 right-1.5 w-3.5 h-3.5 rounded-full flex items-center justify-center flex-shrink-0"
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
                           style={{ background: "#85325c" }}
@@ -695,10 +700,10 @@ export default function SymptomChecker() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.12 }}
-          className="bg-white rounded-2xl border border-[#e8d5c4] p-4"
+          className="bg-white rounded-2xl border border-[#e8d5c4] p-3 md:p-4"
         >
           <p
-            className="text-xs font-semibold mb-3 uppercase tracking-wider"
+            className="text-[11px] md:text-xs font-semibold mb-2.5 md:mb-3 uppercase tracking-wider"
             style={{ color: "#85325c" }}
           >
             {t(lang, "selectAge")}
@@ -709,7 +714,7 @@ export default function SymptomChecker() {
                 key={a}
                 onClick={() => setAge(a)}
                 className={cn(
-                  "py-3 px-2 rounded-xl border text-center transition-all duration-200 text-sm font-medium",
+                  "py-2.5 md:py-3 px-2 rounded-xl border text-center transition-all duration-200 text-xs md:text-sm font-medium min-h-[44px] md:min-h-auto active:opacity-75",
                   age === a
                     ? "border-[#85325c] text-white shadow-sm"
                     : "bg-[#faf6f0] border-[#e8d5c4] hover:border-[#85325c]/50",
@@ -733,11 +738,11 @@ export default function SymptomChecker() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="bg-white rounded-2xl border border-[#e8d5c4] p-4"
+              className="bg-white rounded-2xl border border-[#e8d5c4] p-3 md:p-4"
             >
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between mb-2 gap-2">
                 <p
-                  className="text-xs font-semibold"
+                  className="text-xs md:text-sm font-semibold"
                   style={{ color: "#85325c" }}
                 >
                   {selected.size} symptom{selected.size !== 1 ? "s" : ""}{" "}
@@ -745,7 +750,7 @@ export default function SymptomChecker() {
                 </p>
                 <button
                   onClick={() => setSelected(new Set())}
-                  className="text-xs underline"
+                  className="text-[10px] md:text-xs underline flex-shrink-0"
                   style={{ color: "#9a7a8a" }}
                 >
                   Clear all
@@ -758,7 +763,7 @@ export default function SymptomChecker() {
                     <Badge
                       key={id}
                       variant="outline"
-                      className="text-xs gap-1 border-[#e0c8d0] cursor-pointer hover:border-[#85325c]"
+                      className="text-[10px] md:text-xs gap-1 border-[#e0c8d0] cursor-pointer hover:border-[#85325c] py-1 px-2"
                       style={{ color: "#85325c" }}
                       onClick={() => toggleSymptom(id)}
                     >
@@ -778,13 +783,13 @@ export default function SymptomChecker() {
           <ModalBody>
             <ModalContent className="bg-white">
               <h4
-                className="text-lg font-bold mb-1 text-center"
+                className="text-base md:text-lg font-bold mb-1 text-center"
                 style={{ fontFamily: "var(--font-playfair)", color: "#3d1a2e" }}
               >
                 स्वास्थ्य सहायक भाषा चुनें
               </h4>
               <p
-                className="text-xs text-center mb-4"
+                className="text-[11px] md:text-xs text-center mb-4"
                 style={{ color: "#8a6a7a" }}
               >
                 Choose app language for all screens
@@ -804,7 +809,7 @@ export default function SymptomChecker() {
                       setShowLangModal(false);
                     }}
                     className={cn(
-                      "px-3 py-1.5 rounded-full text-sm font-medium border transition-all",
+                      "px-2.5 md:px-3 py-1.5 rounded-full text-xs md:text-sm font-medium border transition-all min-h-[32px]",
                       lang === l.code
                         ? "border-transparent text-white shadow-sm"
                         : "bg-[#faf6f0] border-[#e0c8d0] hover:border-[#85325c]",
@@ -823,7 +828,7 @@ export default function SymptomChecker() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="h-8 px-3 rounded-lg border-[#e0c8d0]"
+                  className="h-8 px-3 rounded-lg border-[#e0c8d0] text-xs md:text-sm"
                   style={{ color: "#85325c" }}
                   onClick={() => setShowLangModal(false)}
                 >
@@ -837,9 +842,9 @@ export default function SymptomChecker() {
 
       {/* Sticky CTA */}
       <div
-        className="fixed bottom-0 left-0 right-0 md:left-64 p-4 border-t border-[#e0cfc0] z-30"
+        className="fixed bottom-0 left-0 right-0 md:left-64 p-3 md:p-4 border-t border-[#e0cfc0] z-30"
         style={{
-          background: "rgba(240,234,218,0.97)",
+          background: "rgba(240,234,218,0.98)",
           backdropFilter: "blur(12px)",
         }}
       >
@@ -847,7 +852,7 @@ export default function SymptomChecker() {
           <Button
             onClick={handleDiagnose}
             disabled={!canDiagnose || loading}
-            className="w-full h-12 text-base font-semibold rounded-xl gap-2"
+            className="w-full min-h-[44px] md:h-12 text-sm md:text-base font-semibold rounded-xl gap-2 touch-manipulation active:opacity-90"
             style={{
               background: canDiagnose ? "#85325c" : "#c4a8b8",
               color: "#f0eada",
@@ -866,13 +871,16 @@ export default function SymptomChecker() {
               </span>
             ) : (
               <>
-                <Stethoscope size={18} />
+                <Stethoscope size={16} className="md:size-[18px]" />
                 {t(lang, "diagnose")}
-                <ChevronRight size={16} />
+                <ChevronRight size={14} className="md:size-4" />
               </>
             )}
           </Button>
-          <p className="text-center text-[11px]" style={{ color: "#9a7a8a" }}>
+          <p
+            className="text-center text-[10px] md:text-[11px] leading-snug"
+            style={{ color: "#9a7a8a" }}
+          >
             {t(lang, "disclaimer")}
           </p>
         </div>

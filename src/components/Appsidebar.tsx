@@ -95,14 +95,17 @@ export default function AppSidebar({ isOnline }: AppSidebarProps) {
               className="object-contain"
             />
           </div>
-          <div>
+          <div className="min-w-0">
             <h1
-              className="font-bold text-white text-lg leading-none"
+              className="font-bold text-white text-sm md:text-lg leading-none truncate"
               style={{ fontFamily: "var(--font-playfair)" }}
             >
               ArogyaMitra AI
             </h1>
-            <p className="text-[11px] mt-0.5" style={{ color: "#e8d5c4" }}>
+            <p
+              className="text-[10px] md:text-[11px] mt-0.5 truncate"
+              style={{ color: "#e8d5c4" }}
+            >
               स्वास्थ्य सहायक
             </p>
           </div>
@@ -114,15 +117,23 @@ export default function AppSidebar({ isOnline }: AppSidebarProps) {
             style={{ background: isOnline ? "#97C459" : "#F09595" }}
           />
           <span
-            className="text-[11px]"
+            className="text-[10px] md:text-[11px] truncate"
             style={{ color: "#e8d5c4", opacity: 0.75 }}
           >
             {isOnline ? "Online — AI ready" : "Offline mode"}
           </span>
           {isOnline ? (
-            <Wifi size={10} style={{ color: "#97C459" }} />
+            <Wifi
+              size={10}
+              style={{ color: "#97C459" }}
+              className="flex-shrink-0"
+            />
           ) : (
-            <WifiOff size={10} style={{ color: "#F09595" }} />
+            <WifiOff
+              size={10}
+              style={{ color: "#F09595" }}
+              className="flex-shrink-0"
+            />
           )}
         </div>
       </div>
@@ -130,7 +141,7 @@ export default function AppSidebar({ isOnline }: AppSidebarProps) {
       {/* Nav items */}
       <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
         <p
-          className="text-[10px] font-semibold uppercase tracking-widest px-3 py-2"
+          className="text-[9px] md:text-[10px] font-semibold uppercase tracking-widest px-3 py-2"
           style={{ color: "#e8d5c4", opacity: 0.5 }}
         >
           Features
@@ -144,7 +155,7 @@ export default function AppSidebar({ isOnline }: AppSidebarProps) {
               href={item.href}
               onClick={() => setMobileOpen(false)}
               className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group relative",
+                "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group relative min-h-[44px] md:min-h-auto active:opacity-75",
                 isActive
                   ? "bg-white/20 text-white"
                   : "text-white/70 hover:bg-white/10 hover:text-white",
@@ -171,11 +182,18 @@ export default function AppSidebar({ isOnline }: AppSidebarProps) {
                 />
               </div>
               <div className="flex-1 min-w-0 relative z-10">
-                <p className="text-sm font-medium leading-none">{item.label}</p>
-                <p className="text-[11px] mt-0.5 opacity-60">{item.labelHi}</p>
+                <p className="text-xs md:text-sm font-medium leading-none truncate">
+                  {item.label}
+                </p>
+                <p className="text-[9px] md:text-[11px] mt-0.5 opacity-60 truncate">
+                  {item.labelHi}
+                </p>
               </div>
               {isActive && (
-                <ChevronRight size={14} className="relative z-10 opacity-60" />
+                <ChevronRight
+                  size={14}
+                  className="relative z-10 opacity-60 flex-shrink-0"
+                />
               )}
             </Link>
           );
@@ -186,7 +204,7 @@ export default function AppSidebar({ isOnline }: AppSidebarProps) {
       <div className="p-3">
         <a
           href="tel:108"
-          className="flex items-center gap-3 px-3 py-3 rounded-xl transition-all hover:opacity-90"
+          className="flex items-center gap-3 px-3 py-3 md:py-3 rounded-xl transition-all hover:opacity-90 active:opacity-75 min-h-[44px] md:min-h-auto"
           style={{ background: "#A32D2D22", border: "1px solid #F0959540" }}
         >
           <div
@@ -195,9 +213,14 @@ export default function AppSidebar({ isOnline }: AppSidebarProps) {
           >
             <Phone size={14} className="text-white" />
           </div>
-          <div>
-            <p className="text-sm font-semibold text-white">Emergency — 108</p>
-            <p className="text-[11px]" style={{ color: "#F09595" }}>
+          <div className="min-w-0 flex-1">
+            <p className="text-xs md:text-sm font-semibold text-white leading-tight truncate">
+              Emergency — 108
+            </p>
+            <p
+              className="text-[9px] md:text-[11px]"
+              style={{ color: "#F09595" }}
+            >
               Free ambulance service
             </p>
           </div>
@@ -205,7 +228,7 @@ export default function AppSidebar({ isOnline }: AppSidebarProps) {
 
         {/* Disclaimer */}
         <p
-          className="text-[10px] text-center mt-3 leading-relaxed px-1"
+          className="text-[9px] md:text-[10px] text-center mt-3 leading-relaxed px-1"
           style={{ color: "#e8d5c4", opacity: 0.45 }}
         >
           AI assistant only. Not a substitute for medical advice.
@@ -226,10 +249,10 @@ export default function AppSidebar({ isOnline }: AppSidebarProps) {
 
       {/* Mobile top bar */}
       <div
-        className="md:hidden flex items-center justify-between px-4 py-3 sticky top-0 z-50"
+        className="md:hidden flex items-center justify-between px-4 py-2.5 sticky top-0 z-50 min-h-[56px]"
         style={{ background: "#85325c" }}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 min-w-0">
           <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center overflow-hidden flex-shrink-0">
             <Image
               src="/logo.png"
@@ -240,7 +263,7 @@ export default function AppSidebar({ isOnline }: AppSidebarProps) {
             />
           </div>
           <span
-            className="font-bold text-white text-base"
+            className="font-bold text-white text-sm truncate"
             style={{ fontFamily: "var(--font-playfair)" }}
           >
             ArogyaMitra AI
@@ -248,12 +271,12 @@ export default function AppSidebar({ isOnline }: AppSidebarProps) {
         </div>
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center"
+          className="w-10 h-10 rounded-lg bg-white/15 flex items-center justify-center flex-shrink-0 active:opacity-75"
         >
           {mobileOpen ? (
-            <X size={16} className="text-white" />
+            <X size={18} className="text-white" />
           ) : (
-            <Menu size={16} className="text-white" />
+            <Menu size={18} className="text-white" />
           )}
         </button>
       </div>
@@ -274,7 +297,7 @@ export default function AppSidebar({ isOnline }: AppSidebarProps) {
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", bounce: 0, duration: 0.35 }}
-              className="fixed left-0 top-0 bottom-0 z-50 w-72 md:hidden"
+              className="fixed left-0 top-0 bottom-0 z-50 w-[min(280px,85vw)] md:hidden"
               style={{ background: "#85325c" }}
             >
               <SidebarContent />

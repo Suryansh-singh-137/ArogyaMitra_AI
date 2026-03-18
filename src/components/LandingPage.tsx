@@ -469,10 +469,11 @@ const FeatureCard = ({ icon, title, desc, delay }: FeatureCardProps) => {
   return (
     <div
       ref={ref}
+      className="feat-card"
       style={{
         background: "white",
         borderRadius: 20,
-        padding: "2rem 1.75rem",
+        padding: "clamp(1.25rem, 4vw, 2rem) clamp(1.25rem, 4vw, 1.75rem)",
         border: "1.5px solid #e8d5c4",
         opacity: inView ? 1 : 0,
         transform: inView ? "translateY(0)" : "translateY(32px)",
@@ -493,10 +494,15 @@ const FeatureCard = ({ icon, title, desc, delay }: FeatureCardProps) => {
           opacity: 0.6,
         }}
       />
-      <div style={{ fontSize: "2rem", marginBottom: "1rem" }}>{icon}</div>
+      <div
+        className="feature-icon"
+        style={{ fontSize: "clamp(1.75rem, 4vw, 2rem)", marginBottom: "1rem" }}
+      >
+        {icon}
+      </div>
       <div
         style={{
-          fontSize: "1.1rem",
+          fontSize: "clamp(0.95rem, 2vw, 1.1rem)",
           fontWeight: 600,
           color: "#3d1a2e",
           fontFamily: "var(--font-playfair)",
@@ -505,7 +511,13 @@ const FeatureCard = ({ icon, title, desc, delay }: FeatureCardProps) => {
       >
         {title}
       </div>
-      <div style={{ fontSize: "0.9rem", color: "#7a5a6a", lineHeight: 1.65 }}>
+      <div
+        style={{
+          fontSize: "clamp(0.85rem, 1.5vw, 0.9rem)",
+          color: "#7a5a6a",
+          lineHeight: 1.65,
+        }}
+      >
         {desc}
       </div>
     </div>
@@ -525,7 +537,7 @@ const HowStep = ({ num, title, desc, delay }: HowStepProps) => {
       ref={ref}
       style={{
         display: "flex",
-        gap: "1.25rem",
+        gap: "clamp(0.75rem, 3vw, 1.25rem)",
         alignItems: "flex-start",
         opacity: inView ? 1 : 0,
         transform: inView ? "translateX(0)" : "translateX(-24px)",
@@ -534,15 +546,15 @@ const HowStep = ({ num, title, desc, delay }: HowStepProps) => {
     >
       <div
         style={{
-          width: 44,
-          height: 44,
+          width: "clamp(36px, 8vw, 44px)",
+          height: "clamp(36px, 8vw, 44px)",
           borderRadius: "50%",
           background: "#85325c",
           color: "#f0eada",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontSize: "1.1rem",
+          fontSize: "clamp(0.95rem, 2vw, 1.1rem)",
           fontWeight: 700,
           flexShrink: 0,
           fontFamily: "var(--font-playfair)",
@@ -553,7 +565,7 @@ const HowStep = ({ num, title, desc, delay }: HowStepProps) => {
       <div>
         <div
           style={{
-            fontSize: "1rem",
+            fontSize: "clamp(0.9rem, 2vw, 1rem)",
             fontWeight: 600,
             color: "#3d1a2e",
             marginBottom: 4,
@@ -562,7 +574,11 @@ const HowStep = ({ num, title, desc, delay }: HowStepProps) => {
           {title}
         </div>
         <div
-          style={{ fontSize: "0.875rem", color: "#8a6a7a", lineHeight: 1.6 }}
+          style={{
+            fontSize: "clamp(0.8rem, 1.5vw, 0.875rem)",
+            color: "#8a6a7a",
+            lineHeight: 1.6,
+          }}
         >
           {desc}
         </div>
@@ -666,19 +682,63 @@ export default function LandingPage() {
         .btn-outline:hover { background: #85325c; color: #f0eada; }
         .feat-card-hover { transition: transform 0.25s; }
         .feat-card-hover:hover { transform: translateY(-4px); }
+        @media (max-width: 1024px) {
+          .how-flex { flex-direction: column !important; gap: 2.5rem !important; }
+          .impact-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        }
         @media (max-width: 768px) {
           .hide-mobile { display: none !important; }
           .hide-desktop { display: flex !important; align-items: center; justify-content: center; }
-          .hero-grid   { flex-direction: column !important; padding: 2rem 4vw 2rem !important; gap: 2rem !important; }
-          .feats-grid  { grid-template-columns: 1fr !important; }
-          .stats-grid  { grid-template-columns: 1fr 1fr !important; }
-          .hero-section-mobile { padding: 2rem 4vw !important; }
-          .nav-inner { padding-left: 4vw !important; padding-right: 4vw !important; }
+          .hero-grid   { flex-direction: column !important; padding: 2rem 5vw 1.5rem !important; gap: 1.5rem !important; }
+          .hero-illustration { min-height: 280px !important; gap: 0.5rem !important; }
+          .feats-grid  { grid-template-columns: 1fr !important; gap: 1rem !important; }
+          .stats-grid  { grid-template-columns: 1fr 1fr !important; gap: 1.5rem 1rem !important; }
+          .hero-section-mobile { padding: 2rem 5vw !important; }
+          .nav-inner { padding-left: 5vw !important; padding-right: 5vw !important; }
+          section { padding-left: 5vw !important; padding-right: 5vw !important; }
+          .nav-min-height { min-height: 56px !important; }
+          .btn-cta { padding: 0.8rem 1.8rem !important; font-size: 0.9rem !important; }
+          .hero-title { font-size: clamp(1.8rem, 6vw, 2.8rem) !important; }
+          .feature-padding { padding: 1.5rem !important; }
+          .how-steps { gap: 1.25rem !important; }
+        }
+        @media (max-width: 640px) {
+          .hero-grid { padding: 1.5rem 4vw 1rem !important; gap: 1.25rem !important; }
+          .hero-section-mobile { padding: 1.5rem 4vw !important; }
+          .heroes-badge { font-size: 0.75rem !important; padding: 4px 10px !important; }
+          .hero-paragraph { font-size: 0.95rem !important; }
+          .hero-illustration { min-height: 240px !important; }
+          .stats-grid { grid-template-columns: 1fr !important; gap: 1.25rem !important; }
+          .impact-grid { grid-template-columns: 1fr !important; }
+          .impact-card { padding: 1.5rem 1rem !important; }
+          .how-section { padding: 3rem 4vw !important; }
+          .btn-cta { padding: 0.7rem 1.5rem !important; font-size: 0.85rem !important; }
+          .lang-tags { gap: 6px !important; }
+          .lang-tag { padding: 3px 10px !important; font-size: 0.75rem !important; }
           section { padding-left: 4vw !important; padding-right: 4vw !important; }
+          .nav-inner { padding-left: 4vw !important; padding-right: 4vw !important; }
         }
         @media (max-width: 480px) {
-          .hero-grid { padding: 1.5rem 3vw 1.5rem !important; }
-          .hero-section-mobile { padding: 1.5rem 3vw !important; }
+          .hero-grid { padding: 1rem 3vw !important; gap: 1rem !important; }
+          .hero-section-mobile { padding: 1rem 3vw !important; }
+          .nav-inner { padding-left: 3vw !important; padding-right: 3vw !important; }
+          section { padding-left: 3vw !important; padding-right: 3vw !important; }
+          .hero-title { font-size: clamp(1.4rem, 5.5vw, 2rem) !important; line-height: 1.15 !important; }
+          .hero-paragraph { font-size: 0.9rem !important; margin-bottom: 1.25rem !important; }
+          .hero-illustration { min-height: 200px !important; }
+          .stats-section { padding: 2rem 3vw !important; }
+          .feat-card { padding: 1.25rem !important; }
+          .feature-icon { font-size: 1.6rem !important; }
+          .btn-flex { gap: 0.5rem !important; }
+          .btn-cta { padding: 0.65rem 1.2rem !important; font-size: 0.8rem !important; width: 100% !important; }
+          .how-section { padding: 2.5rem 3vw !important; }
+          .cta-section { padding: 3rem 3vw !important; }
+          .footer { padding: 1.5rem 3vw !important; }
+        }
+        @media (max-width: 360px) {
+          .hero-grid { padding: 0.75rem 2vw !important; }
+          .hero-title { font-size: clamp(1.2rem, 5vw, 1.6rem) !important; }
+          .lang-tags { gap: 4px !important; }
         }
         @media (min-width: 769px) {
           .hide-desktop { display: none !important; }
@@ -692,7 +752,7 @@ export default function LandingPage() {
           position: "sticky",
           top: 0,
           zIndex: 100,
-          background: "rgba(240,234,218,0.92)",
+          background: "rgba(240,234,218,0.95)",
           backdropFilter: "blur(12px)",
           borderBottom: "1px solid #e0cfc0",
           padding: "0 5vw",
@@ -709,6 +769,7 @@ export default function LandingPage() {
             justifyContent: "space-between",
             flexWrap: "wrap",
           }}
+          className="nav-min-height"
         >
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div
@@ -736,7 +797,7 @@ export default function LandingPage() {
               style={{
                 fontFamily: "var(--font-playfair)",
                 fontWeight: 700,
-                fontSize: "1.15rem",
+                fontSize: "clamp(0.95rem, 4vw, 1.15rem)",
                 color: "#3d1a2e",
               }}
             >
@@ -782,7 +843,15 @@ export default function LandingPage() {
               cursor: "pointer",
               fontSize: "1.4rem",
               color: "#85325c",
-              padding: 8,
+              padding: 12,
+              width: 44,
+              height: 44,
+              minWidth: 44,
+              minHeight: 44,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginRight: "-12px",
             }}
             aria-label="menu"
           >
@@ -812,7 +881,7 @@ export default function LandingPage() {
               <a
                 href="#features"
                 className="nav-link"
-                style={{ padding: "0.6rem 0" }}
+                style={{ padding: "0.75rem 0", display: "block" }}
                 onClick={() => setMenuOpen(false)}
               >
                 Features
@@ -820,7 +889,7 @@ export default function LandingPage() {
               <a
                 href="#how"
                 className="nav-link"
-                style={{ padding: "0.6rem 0" }}
+                style={{ padding: "0.75rem 0", display: "block" }}
                 onClick={() => setMenuOpen(false)}
               >
                 How it works
@@ -828,7 +897,7 @@ export default function LandingPage() {
               <a
                 href="#impact"
                 className="nav-link"
-                style={{ padding: "0.6rem 0" }}
+                style={{ padding: "0.75rem 0", display: "block" }}
                 onClick={() => setMenuOpen(false)}
               >
                 Impact
@@ -836,7 +905,7 @@ export default function LandingPage() {
               <Link
                 href="/developers"
                 className="nav-link"
-                style={{ padding: "0.6rem 0" }}
+                style={{ padding: "0.75rem 0", display: "block" }}
                 onClick={() => setMenuOpen(false)}
               >
                 Developers
@@ -844,10 +913,11 @@ export default function LandingPage() {
               <button
                 className="btn-cta"
                 style={{
-                  marginTop: "0.5rem",
+                  marginTop: "0.75rem",
                   padding: "0.75rem 1.25rem",
                   fontSize: "0.9rem",
                   alignSelf: "flex-start",
+                  width: "auto",
                 }}
                 onClick={() => {
                   setMenuOpen(false);
@@ -876,7 +946,7 @@ export default function LandingPage() {
       >
         <div style={{ flex: "1 1 280px", minWidth: 0 }}>
           <div
-            className="hero-text"
+            className="hero-text heroes-badge"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -897,16 +967,20 @@ export default function LandingPage() {
               }}
             />
             <span
-              style={{ fontSize: "0.82rem", color: "#85325c", fontWeight: 500 }}
+              style={{
+                fontSize: "clamp(0.72rem, 2vw, 0.82rem)",
+                color: "#85325c",
+                fontWeight: 500,
+              }}
             >
               Free for rural India · Offline ready
             </span>
           </div>
           <h1
-            className="hero-text-2"
+            className="hero-text-2 hero-title"
             style={{
               fontFamily: "var(--font-playfair)",
-              fontSize: "clamp(2.4rem,5.5vw,4rem)",
+              fontSize: "clamp(2rem, 6vw, 4rem)",
               fontWeight: 700,
               color: "#3d1a2e",
               lineHeight: 1.12,
@@ -920,9 +994,9 @@ export default function LandingPage() {
             </span>
           </h1>
           <p
-            className="hero-text-3"
+            className="hero-text-3 hero-paragraph"
             style={{
-              fontSize: "1.05rem",
+              fontSize: "clamp(0.95rem, 2vw, 1.05rem)",
               color: "#6a4a5a",
               lineHeight: 1.75,
               marginBottom: "2rem",
@@ -934,7 +1008,7 @@ export default function LandingPage() {
             Free forever.
           </p>
           <div
-            className="hero-text-4"
+            className="hero-text-4 btn-flex"
             style={{
               display: "flex",
               gap: "0.75rem",
@@ -947,7 +1021,7 @@ export default function LandingPage() {
             </button>
           </div>
           <div
-            className="hero-text-4"
+            className="hero-text-4 lang-tags"
             style={{ display: "flex", gap: 8, flexWrap: "wrap" }}
           >
             {languages.map((l, i) => (
@@ -966,6 +1040,7 @@ export default function LandingPage() {
           </div>
         </div>
         <div
+          className="hero-illustration"
           style={{
             flex: "1 1 300px",
             display: "flex",
@@ -995,14 +1070,13 @@ export default function LandingPage() {
               padding: "10px 14px",
               border: "1.5px solid #e8d5c4",
               boxShadow: "0 4px 20px #85325c18",
+              fontSize: "clamp(0.65rem, 2vw, 0.75rem)",
             }}
           >
-            <div
-              style={{ fontSize: "0.75rem", color: "#85325c", fontWeight: 600 }}
-            >
+            <div style={{ color: "#85325c", fontWeight: 600 }}>
               ✓ Diagnosis ready
             </div>
-            <div style={{ fontSize: "0.7rem", color: "#8a6a7a", marginTop: 2 }}>
+            <div style={{ color: "#8a6a7a", marginTop: 2 }}>
               बुखार · Viral fever
             </div>
           </div>
@@ -1014,16 +1088,14 @@ export default function LandingPage() {
               background: "#85325c",
               borderRadius: 14,
               padding: "10px 14px",
+              fontSize: "clamp(0.65rem, 2vw, 0.75rem)",
             }}
           >
-            <div
-              style={{ fontSize: "0.75rem", color: "#f0eada", fontWeight: 600 }}
-            >
+            <div style={{ color: "#f0eada", fontWeight: 600 }}>
               📍 Hospital nearby
             </div>
             <div
               style={{
-                fontSize: "0.7rem",
                 color: "#f0eada",
                 opacity: 0.8,
                 marginTop: 2,
@@ -1037,18 +1109,19 @@ export default function LandingPage() {
 
       {/* ── Stats ── */}
       <section
+        className="stats-section"
         ref={statsRef}
         style={{ background: "#85325c", padding: "3rem 5vw", margin: "1rem 0" }}
       >
         <div
+          className="stats-grid"
           style={{
             maxWidth: 1160,
             margin: "0 auto",
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))",
+            gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))",
             gap: "2rem 1rem",
           }}
-          className="stats-grid"
         >
           {stats.map((s, i) => (
             <div
@@ -1062,7 +1135,7 @@ export default function LandingPage() {
             >
               <div
                 style={{
-                  fontSize: "clamp(1.8rem,4vw,2.8rem)",
+                  fontSize: "clamp(1.5rem, 5vw, 2.8rem)",
                   fontWeight: 700,
                   color: "#f0eada",
                   fontFamily: "var(--font-playfair)",
@@ -1073,10 +1146,11 @@ export default function LandingPage() {
               </div>
               <div
                 style={{
-                  fontSize: "0.85rem",
+                  fontSize: "clamp(0.75rem, 1.5vw, 0.85rem)",
                   color: "#e8d5c4",
                   marginTop: 6,
                   opacity: 0.85,
+                  lineHeight: 1.4,
                 }}
               >
                 {s.label}
@@ -1107,7 +1181,7 @@ export default function LandingPage() {
           <h2
             style={{
               fontFamily: "var(--font-playfair)",
-              fontSize: "clamp(1.8rem,4vw,2.8rem)",
+              fontSize: "clamp(1.6rem, 5vw, 2.8rem)",
               fontWeight: 700,
               color: "#3d1a2e",
               lineHeight: 1.2,
@@ -1155,8 +1229,13 @@ export default function LandingPage() {
       </section>
 
       {/* ── How it works ── */}
-      <section id="how" style={{ background: "white", padding: "5rem 5vw" }}>
+      <section
+        id="how"
+        style={{ background: "white", padding: "5rem 5vw" }}
+        className="how-section"
+      >
         <div
+          className="how-flex"
           style={{
             maxWidth: 1160,
             margin: "0 auto",
@@ -1182,7 +1261,7 @@ export default function LandingPage() {
             <h2
               style={{
                 fontFamily: "var(--font-playfair)",
-                fontSize: "clamp(1.8rem,4vw,2.6rem)",
+                fontSize: "clamp(1.6rem, 5vw, 2.6rem)",
                 fontWeight: 700,
                 color: "#3d1a2e",
                 lineHeight: 1.2,
@@ -1203,6 +1282,7 @@ export default function LandingPage() {
                 flexDirection: "column",
                 gap: "1.75rem",
               }}
+              className="how-steps"
             >
               <HowStep
                 delay={0}
@@ -1233,7 +1313,7 @@ export default function LandingPage() {
           >
             <div
               className="dot-pattern"
-              style={{ borderRadius: 32, padding: "2rem" }}
+              style={{ borderRadius: 32, padding: "clamp(1.5rem, 4vw, 2rem)" }}
             >
               <div className="float" style={{ animationDelay: "0.5s" }}>
                 <PhoneIllustration />
@@ -1268,7 +1348,7 @@ export default function LandingPage() {
         <h2
           style={{
             fontFamily: "var(--font-playfair)",
-            fontSize: "clamp(1.8rem,4vw,2.8rem)",
+            fontSize: "clamp(1.6rem, 5vw, 2.8rem)",
             fontWeight: 700,
             color: "#3d1a2e",
             lineHeight: 1.2,
@@ -1282,7 +1362,7 @@ export default function LandingPage() {
         </h2>
         <p
           style={{
-            fontSize: "1.05rem",
+            fontSize: "clamp(0.95rem, 2vw, 1.05rem)",
             color: "#7a5a6a",
             maxWidth: 580,
             margin: "0 auto 3.5rem",
@@ -1294,6 +1374,7 @@ export default function LandingPage() {
           home or go now.
         </p>
         <div
+          className="impact-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))",
@@ -1306,10 +1387,12 @@ export default function LandingPage() {
               <div
                 key={i}
                 ref={ref}
+                className="impact-card"
                 style={{
                   background: "white",
                   borderRadius: 20,
-                  padding: "1.75rem 1.25rem",
+                  padding:
+                    "clamp(1.5rem, 4vw, 1.75rem) clamp(1rem, 3vw, 1.25rem)",
                   border: "1.5px solid #e8d5c4",
                   opacity: inView ? 1 : 0,
                   transform: inView ? "scale(1)" : "scale(0.95)",
@@ -1319,7 +1402,7 @@ export default function LandingPage() {
                 <div
                   style={{
                     fontFamily: "var(--font-playfair)",
-                    fontSize: "2.4rem",
+                    fontSize: "clamp(1.8rem, 5vw, 2.4rem)",
                     fontWeight: 700,
                     color: "#85325c",
                     lineHeight: 1,
@@ -1329,7 +1412,7 @@ export default function LandingPage() {
                 </div>
                 <div
                   style={{
-                    fontSize: "0.9rem",
+                    fontSize: "clamp(0.8rem, 2vw, 0.9rem)",
                     color: "#3d1a2e",
                     fontWeight: 500,
                     margin: "6px 0 4px",
@@ -1337,7 +1420,12 @@ export default function LandingPage() {
                 >
                   {s.l}
                 </div>
-                <div style={{ fontSize: "0.78rem", color: "#9a7a8a" }}>
+                <div
+                  style={{
+                    fontSize: "clamp(0.7rem, 1.5vw, 0.78rem)",
+                    color: "#9a7a8a",
+                  }}
+                >
                   {s.sub}
                 </div>
               </div>
@@ -1348,6 +1436,7 @@ export default function LandingPage() {
 
       {/* ── CTA ── */}
       <section
+        className="cta-section"
         style={{
           background: "#3d1a2e",
           padding: "5rem 5vw",
@@ -1397,7 +1486,7 @@ export default function LandingPage() {
           <h2
             style={{
               fontFamily: "var(--font-playfair)",
-              fontSize: "clamp(2rem,5vw,3.2rem)",
+              fontSize: "clamp(1.6rem, 6vw, 3.2rem)",
               fontWeight: 700,
               color: "#f0eada",
               lineHeight: 1.15,
@@ -1412,7 +1501,7 @@ export default function LandingPage() {
           </h2>
           <p
             style={{
-              fontSize: "1rem",
+              fontSize: "clamp(0.9rem, 2vw, 1rem)",
               color: "#e8d5c4",
               marginBottom: "2.5rem",
               lineHeight: 1.7,
@@ -1435,8 +1524,8 @@ export default function LandingPage() {
                 color: "#85325c",
                 border: "none",
                 borderRadius: 50,
-                padding: "1rem 2.4rem",
-                fontSize: "1rem",
+                padding: "clamp(0.8rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2.4rem)",
+                fontSize: "clamp(0.85rem, 2vw, 1rem)",
                 fontWeight: 600,
                 cursor: "pointer",
                 fontFamily: "var(--font-montserrat)",
@@ -1460,8 +1549,8 @@ export default function LandingPage() {
                 color: "#f0eada",
                 border: "1.5px solid rgba(240,234,218,0.4)",
                 borderRadius: 50,
-                padding: "1rem 2rem",
-                fontSize: "1rem",
+                padding: "clamp(0.8rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem)",
+                fontSize: "clamp(0.85rem, 2vw, 1rem)",
                 cursor: "pointer",
                 fontFamily: "var(--font-montserrat)",
                 transition: "all 0.2s",
@@ -1489,6 +1578,7 @@ export default function LandingPage() {
 
       {/* ── Footer ── */}
       <footer
+        className="footer"
         style={{
           background: "#2d1020",
           padding: "2rem 5vw",
@@ -1502,6 +1592,7 @@ export default function LandingPage() {
             justifyContent: "center",
             gap: 10,
             marginBottom: "0.75rem",
+            flexWrap: "wrap",
           }}
         >
           <div
@@ -1530,12 +1621,19 @@ export default function LandingPage() {
               fontFamily: "var(--font-playfair)",
               color: "#f0eada",
               fontWeight: 600,
+              fontSize: "clamp(0.9rem, 2vw, 1rem)",
             }}
           >
             ArogyaMitra AI
           </span>
         </div>
-        <p style={{ fontSize: "0.82rem", color: "#8a6a7a" }}>
+        <p
+          style={{
+            fontSize: "clamp(0.7rem, 1.5vw, 0.82rem)",
+            color: "#8a6a7a",
+            lineHeight: 1.6,
+          }}
+        >
           Built with ❤️ for rural India · Hackathon project · Not a substitute
           for professional medical advice
         </p>
