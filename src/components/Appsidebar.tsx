@@ -17,6 +17,7 @@ import {
   Phone,
   Sparkles,
   AlertTriangle,
+  Code2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -69,6 +70,13 @@ const NAV_ITEMS = [
     label: "Outbreak Alerts",
     labelHi: "रोग अलर्ट (WHO)",
     desc: "Latest India disease news",
+  },
+  {
+    href: "/developers",
+    icon: Code2,
+    label: "Developers",
+    labelHi: "डेवलपर्स",
+    desc: "Meet the team",
   },
 ];
 

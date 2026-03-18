@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { useState, useEffect, useRef, RefObject } from "react";
 
 /* ─── hooks ─────────────────────────────────────────────────────────────── */
@@ -723,7 +724,13 @@ export default function LandingPage() {
                 justifyContent: "center",
               }}
             >
-              <Image src="/logo.png" alt="ArogyaMitra AI" width={34} height={34} className="object-contain" />
+              <Image
+                src="/logo.png"
+                alt="ArogyaMitra AI"
+                width={34}
+                height={34}
+                className="object-contain"
+              />
             </div>
             <span
               style={{
@@ -761,6 +768,9 @@ export default function LandingPage() {
             <a href="#impact" className="nav-link">
               Impact
             </a>
+            <Link href="/developers" className="nav-link">
+              Developers
+            </Link>
             <button
               className="btn-cta"
               style={{ padding: "0.6rem 1.4rem", fontSize: "0.85rem" }}
@@ -803,14 +813,58 @@ export default function LandingPage() {
               borderTop: "1px solid #e0cfc0",
             }}
           >
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", paddingTop: "0.75rem" }}>
-              <a href="#features" className="nav-link" style={{ padding: "0.6rem 0" }} onClick={() => setMenuOpen(false)}>Features</a>
-              <a href="#how" className="nav-link" style={{ padding: "0.6rem 0" }} onClick={() => setMenuOpen(false)}>How it works</a>
-              <a href="#impact" className="nav-link" style={{ padding: "0.6rem 0" }} onClick={() => setMenuOpen(false)}>Impact</a>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.5rem",
+                paddingTop: "0.75rem",
+              }}
+            >
+              <a
+                href="#features"
+                className="nav-link"
+                style={{ padding: "0.6rem 0" }}
+                onClick={() => setMenuOpen(false)}
+              >
+                Features
+              </a>
+              <a
+                href="#how"
+                className="nav-link"
+                style={{ padding: "0.6rem 0" }}
+                onClick={() => setMenuOpen(false)}
+              >
+                How it works
+              </a>
+              <a
+                href="#impact"
+                className="nav-link"
+                style={{ padding: "0.6rem 0" }}
+                onClick={() => setMenuOpen(false)}
+              >
+                Impact
+              </a>
+              <Link
+                href="/developers"
+                className="nav-link"
+                style={{ padding: "0.6rem 0" }}
+                onClick={() => setMenuOpen(false)}
+              >
+                Developers
+              </Link>
               <button
                 className="btn-cta"
-                style={{ marginTop: "0.5rem", padding: "0.75rem 1.25rem", fontSize: "0.9rem", alignSelf: "flex-start" }}
-                onClick={() => { setMenuOpen(false); router.push("/app"); }}
+                style={{
+                  marginTop: "0.5rem",
+                  padding: "0.75rem 1.25rem",
+                  fontSize: "0.9rem",
+                  alignSelf: "flex-start",
+                }}
+                onClick={() => {
+                  setMenuOpen(false);
+                  router.push("/app");
+                }}
               >
                 Try Free
               </button>
@@ -900,13 +954,9 @@ export default function LandingPage() {
               marginBottom: "2.5rem",
             }}
           >
-            <button
-              className="btn-cta"
-              onClick={() => router.push("/app")}
-            >
+            <button className="btn-cta" onClick={() => router.push("/app")}>
               अभी शुरू करें — Start Free
             </button>
-            <button className="btn-outline">Watch demo →</button>
           </div>
           <div
             className="hero-text-4"
@@ -1428,6 +1478,12 @@ export default function LandingPage() {
                 fontFamily: "var(--font-montserrat)",
                 transition: "all 0.2s",
               }}
+              onClick={() => {
+                window.open(
+                  "https://github.com/Suryansh-singh-137/ArogyaMitra_AI",
+                  "_blank",
+                );
+              }}
               onMouseOver={(e) => {
                 (e.currentTarget as HTMLButtonElement).style.borderColor =
                   "#f0eada";
@@ -1473,7 +1529,13 @@ export default function LandingPage() {
               justifyContent: "center",
             }}
           >
-            <Image src="/logo.png" alt="ArogyaMitra AI" width={28} height={28} className="object-contain" />
+            <Image
+              src="/logo.png"
+              alt="ArogyaMitra AI"
+              width={28}
+              height={28}
+              className="object-contain"
+            />
           </div>
           <span
             style={{
