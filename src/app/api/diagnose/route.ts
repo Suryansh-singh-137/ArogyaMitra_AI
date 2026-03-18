@@ -4,9 +4,14 @@ import { getOfflineDiagnosis } from "@/lib/conditions";
 import type { DiagnosisRequest } from "@/types";
 
 export async function POST(req: NextRequest) {
+  let body: DiagnosisRequest | null = null;
   try {
-    const body = (await req.json()) as DiagnosisRequest;
+    body = (await req.json()) as DiagnosisRequest;
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
 
+  try {
     if (!body.symptoms || body.symptoms.length === 0) {
       return NextResponse.json(
         { error: "No symptoms provided" },
@@ -22,11 +27,10 @@ export async function POST(req: NextRequest) {
 
     const diagnosis = await callOpenRouter(body);
     return NextResponse.json(diagnosis);
-  } catch (err) {
-    console.error("Diagnosis error:", err);
+  } catch (err: any) {
+    console.error("Diagnosis error:", err.message || err);
     // Graceful fallback — never show a blank screen
     try {
-      const body = (await req.clone().json()) as DiagnosisRequest;
       const fallback = getOfflineDiagnosis(
         body.symptoms || [],
         body.language || "hi",

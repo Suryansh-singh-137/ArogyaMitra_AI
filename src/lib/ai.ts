@@ -93,7 +93,7 @@ export async function callOpenRouter(
     body: JSON.stringify({
       model: MODEL,
       temperature: 0.3,
-      max_tokens: 1000,
+      max_tokens: 400,
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         { role: "user", content: buildPrompt(req) },
@@ -102,8 +102,21 @@ export async function callOpenRouter(
   });
 
   if (!response.ok) {
-    const err = await response.text();
-    throw new Error(`OpenRouter API error ${response.status}: ${err}`);
+    const errText = await response.text();
+    let errorMessage = errText;
+    try {
+      const parsed = JSON.parse(errText);
+      if (parsed.error && parsed.error.message) {
+        errorMessage = parsed.error.message;
+      }
+    } catch {}
+
+    if (response.status === 429) {
+      errorMessage = "Limit exceeded: Too many requests. Please try again later.";
+    } else if (response.status === 402) {
+      errorMessage = "Limit exceeded: Free credits exhausted. Please try again later.";
+    }
+    throw new Error(`OpenRouter API error ${response.status}: ${errorMessage}`);
   }
 
   const data = await response.json();
@@ -138,7 +151,7 @@ Return this EXACT JSON:
     body: JSON.stringify({
       model: MODEL,
       temperature: 0.2,
-      max_tokens: 700,
+      max_tokens: 400,
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         { role: "user", content: prompt },
@@ -147,8 +160,21 @@ Return this EXACT JSON:
   });
 
   if (!response.ok) {
-    const err = await response.text();
-    throw new Error(`OpenRouter API error ${response.status}: ${err}`);
+    const errText = await response.text();
+    let errorMessage = errText;
+    try {
+      const parsed = JSON.parse(errText);
+      if (parsed.error && parsed.error.message) {
+        errorMessage = parsed.error.message;
+      }
+    } catch {}
+
+    if (response.status === 429) {
+      errorMessage = "Limit exceeded: Too many requests. Please try again later.";
+    } else if (response.status === 402) {
+      errorMessage = "Limit exceeded: Free credits exhausted. Please try again later.";
+    }
+    throw new Error(`OpenRouter API error ${response.status}: ${errorMessage}`);
   }
 
   const data = await response.json();
@@ -180,7 +206,7 @@ Keep it short, warm, and reassuring. Avoid medical jargon.`;
     headers: buildHeaders(apiKey),
     body: JSON.stringify({
       model: MODEL, // Claude Sonnet supports vision
-      max_tokens: 700,
+      max_tokens: 400,
       messages: [
         {
           role: "user",
@@ -196,7 +222,23 @@ Keep it short, warm, and reassuring. Avoid medical jargon.`;
     }),
   });
 
-  if (!response.ok) throw new Error("OpenRouter vision error");
+  if (!response.ok) {
+    const errText = await response.text();
+    let errorMessage = errText;
+    try {
+      const parsed = JSON.parse(errText);
+      if (parsed.error && parsed.error.message) {
+        errorMessage = parsed.error.message;
+      }
+    } catch {}
+
+    if (response.status === 429) {
+      errorMessage = "Limit exceeded: Too many requests. Please try again later.";
+    } else if (response.status === 402) {
+      errorMessage = "Limit exceeded: Free credits exhausted. Please try again later.";
+    }
+    throw new Error(`OpenRouter vision error ${response.status}: ${errorMessage}`);
+  }
   const data = await response.json();
   return data.choices[0].message.content as string;
 }
