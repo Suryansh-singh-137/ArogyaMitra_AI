@@ -658,7 +658,7 @@ export default function LandingPage() {
         fontFamily: "var(--font-montserrat)",
         background: "#f0eada",
         minHeight: "100vh",
-        overflowX: "hidden",
+        overflowX: "clip",
       }}
     >
       <style>{`
@@ -822,7 +822,13 @@ export default function LandingPage() {
             </Link>
             <button
               className="btn-cta"
-              style={{ padding: "0.6rem 1.4rem", fontSize: "0.85rem" }}
+              style={{ 
+                padding: "0.6rem 1.4rem", 
+                fontSize: "0.85rem",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px"
+              }}
               onClick={() => {
                 try {
                   router.push("/app");
@@ -831,7 +837,9 @@ export default function LandingPage() {
                 }
               }}
             >
-              Try Free
+              <span style={{ fontWeight: 600 }}>जांच करें</span>
+              <span style={{ opacity: 0.5, fontWeight: 400 }}>|</span>
+              <span style={{ opacity: 0.9 }}>Examine</span>
             </button>
           </div>
           <button
@@ -918,13 +926,18 @@ export default function LandingPage() {
                   fontSize: "0.9rem",
                   alignSelf: "flex-start",
                   width: "auto",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px"
                 }}
                 onClick={() => {
                   setMenuOpen(false);
                   router.push("/app");
                 }}
               >
-                Try Free
+                <span style={{ fontWeight: 600 }}>जांच करें</span>
+                <span style={{ opacity: 0.5, fontWeight: 400 }}>|</span>
+                <span style={{ opacity: 0.9 }}>Examine</span>
               </button>
             </div>
           </div>
@@ -1016,8 +1029,19 @@ export default function LandingPage() {
               marginBottom: "2.5rem",
             }}
           >
-            <button className="btn-cta" onClick={() => router.push("/app")}>
-              अभी शुरू करें — Start Free
+            <button 
+              className="btn-cta" 
+              onClick={() => router.push("/app")}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "10px"
+              }}
+            >
+              <span style={{ fontSize: "1.1rem" }}>🩺</span>
+              <span style={{ fontWeight: 600 }}>जांच करें</span>
+              <span style={{ opacity: 0.5, fontSize: "0.9em", fontWeight: 400 }}>|</span>
+              <span style={{ opacity: 0.9, fontSize: "0.95em", fontWeight: 500 }}>Examine</span>
             </button>
           </div>
           <div
@@ -1526,10 +1550,14 @@ export default function LandingPage() {
                 borderRadius: 50,
                 padding: "clamp(0.8rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2.4rem)",
                 fontSize: "clamp(0.85rem, 2vw, 1rem)",
-                fontWeight: 600,
+                fontWeight: 700,
                 cursor: "pointer",
                 fontFamily: "var(--font-montserrat)",
                 transition: "all 0.2s",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "10px"
               }}
               onClick={() => router.push("/app")}
               onMouseOver={(e) => {
@@ -1541,7 +1569,10 @@ export default function LandingPage() {
                   "#f0eada";
               }}
             >
-              अभी शुरू करें — Try Free
+              <span style={{ fontSize: "1.2rem" }}>🩺</span>
+              <span>जांच करें</span>
+              <span style={{ opacity: 0.4, fontWeight: 400 }}>|</span>
+              <span style={{ opacity: 0.9 }}>Examine</span>
             </button>
             <button
               style={{
