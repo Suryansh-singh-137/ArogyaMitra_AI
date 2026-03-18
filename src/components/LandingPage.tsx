@@ -742,18 +742,6 @@ export default function LandingPage() {
             >
               ArogyaMitra AI
             </span>
-            <span
-              style={{
-                fontSize: "0.7rem",
-                background: "#85325c",
-                color: "#f0eada",
-                padding: "2px 8px",
-                borderRadius: 20,
-                fontWeight: 500,
-              }}
-            >
-              Beta
-            </span>
           </div>
           <div
             className="hide-mobile"
