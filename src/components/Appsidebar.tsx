@@ -71,13 +71,6 @@ const NAV_ITEMS = [
     labelHi: "रोग अलर्ट (WHO)",
     desc: "Latest India disease news",
   },
-  {
-    href: "/developers",
-    icon: Code2,
-    label: "Developers",
-    labelHi: "डेवलपर्स",
-    desc: "Meet the team",
-  },
 ];
 
 interface AppSidebarProps {
@@ -94,7 +87,13 @@ export default function AppSidebar({ isOnline }: AppSidebarProps) {
       <div className="p-5 border-b border-white/10">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0 overflow-hidden">
-            <Image src="/logo.png" alt="ArogyaMitra AI" width={36} height={36} className="object-contain" />
+            <Image
+              src="/logo.png"
+              alt="ArogyaMitra AI"
+              width={36}
+              height={36}
+              className="object-contain"
+            />
           </div>
           <div>
             <h1
@@ -232,7 +231,13 @@ export default function AppSidebar({ isOnline }: AppSidebarProps) {
       >
         <div className="flex items-center gap-2">
           <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center overflow-hidden flex-shrink-0">
-            <Image src="/logo.png" alt="ArogyaMitra AI" width={28} height={28} className="object-contain" />
+            <Image
+              src="/logo.png"
+              alt="ArogyaMitra AI"
+              width={28}
+              height={28}
+              className="object-contain"
+            />
           </div>
           <span
             className="font-bold text-white text-base"

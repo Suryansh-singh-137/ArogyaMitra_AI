@@ -169,9 +169,9 @@ export default function SymptomChecker() {
   const [lang, setLang] = useState<Language>(() => {
     if (typeof window === "undefined") return "hi";
     try {
-      const stored = localStorage.getItem("sehat_lang_default") as
-        | Language
-        | null;
+      const stored = localStorage.getItem(
+        "sehat_lang_default",
+      ) as Language | null;
       return stored || "hi";
     } catch {
       return "hi";
@@ -190,9 +190,9 @@ export default function SymptomChecker() {
   // On first load, ask for preferred language across the app
   useEffect(() => {
     try {
-      const stored = localStorage.getItem("sehat_lang_default") as
-        | Language
-        | null;
+      const stored = localStorage.getItem(
+        "sehat_lang_default",
+      ) as Language | null;
       if (!stored) setShowLangModal(true);
     } catch {
       setShowLangModal(true);
@@ -446,7 +446,7 @@ export default function SymptomChecker() {
                       : { color: "#85325c" }
                   }
                 >
-                {mode === "chips" ? "Chips" : "Free text"}
+                  {mode === "chips" ? "Chips" : "Free text"}
                 </button>
               ))}
             </div>
@@ -465,14 +465,14 @@ export default function SymptomChecker() {
               }}
               placeholder={
                 lang === "hi"
-                  ? "अपने लक्षण लिखें... जैसे: मेरा दिल की धड़कन रुक रही है, सांस नहीं आ रही"
+                  ? "अपने लक्षण लिखें... जैसे: मुझे बुखार और सिरदर्द है"
                   : lang === "bn"
                     ? "আপনার উপসর্গ লিখুন... যেমন: বুকে ব্যথা হচ্ছে"
                     : lang === "ta"
                       ? "உங்கள் பிரச்சினையை விவரிக்கவும்..."
                       : lang === "te"
                         ? "మీ సమస్యను వివరించండి..."
-                        : "Describe your problem freely... e.g. my heartbeat stopped, I have chest pain and can't breathe"
+                        : "Describe your problem freely... e.g. fever and headache"
               }
               className="pr-24 resize-none text-sm rounded-xl border-[#e8d5c4] focus-visible:ring-[#85325c]/30"
               style={{ minHeight: 90, background: "#faf6f0", color: "#3d1a2e" }}
@@ -491,7 +491,9 @@ export default function SymptomChecker() {
               {/* Voice button — touch-manipulation helps tap reliability on mobile */}
               <button
                 type="button"
-                onClick={() => { if (!listening) startVoice(); }}
+                onClick={() => {
+                  if (!listening) startVoice();
+                }}
                 aria-label={t(lang, "voicePrompt")}
                 className={cn(
                   "w-8 h-8 rounded-lg flex items-center justify-center transition-all touch-manipulation",
@@ -623,12 +625,12 @@ export default function SymptomChecker() {
               transition={{ delay: 0.1 }}
               className="bg-white rounded-2xl border border-[#e8d5c4] p-4"
             >
-        <p
-          className="text-xs font-semibold mb-3 uppercase tracking-wider"
-          style={{ color: "#85325c" }}
-        >
-          {t(lang, "orTapSymptoms")}
-        </p>
+              <p
+                className="text-xs font-semibold mb-3 uppercase tracking-wider"
+                style={{ color: "#85325c" }}
+              >
+                {t(lang, "orTapSymptoms")}
+              </p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {SYMPTOMS.map((symptom, i) => {
                   const isSelected = selected.has(symptom.id);
