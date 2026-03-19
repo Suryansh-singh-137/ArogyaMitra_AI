@@ -986,7 +986,7 @@ export default function LandingPage() {
                 fontWeight: 500,
               }}
             >
-             Free for Rural India · Built for Accessibility
+             Examine India  · Built for Accessibility
             </span>
           </div>
           <h1
@@ -1532,7 +1532,7 @@ export default function LandingPage() {
               opacity: 0.9,
             }}
           >
-            Free. Offline. In your language. No sign-up needed.
+            Free.In your language.No sign-up needed.
           </p>
           <div
             style={{
