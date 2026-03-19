@@ -636,8 +636,8 @@ export default function LandingPage() {
 
   const stats = [
     { number: "108M+", label: "Indians far from a hospital" },
-    { number: "22+", label: "Indian languages supported" },
-    { number: "80+", label: "Common conditions covered offline" },
+    { number: "5+", label: "Indian languages supported" },
+    { number: "80+", label: "Common conditions covered" },
     { number: "Free", label: "Always free for rural users" },
   ];
 
