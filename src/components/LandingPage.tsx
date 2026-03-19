@@ -986,7 +986,7 @@ export default function LandingPage() {
                 fontWeight: 500,
               }}
             >
-              Free for rural India · Offline ready
+             Free for Rural India · Built for Accessibility
             </span>
           </div>
           <h1
