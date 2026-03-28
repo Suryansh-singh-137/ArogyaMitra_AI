@@ -1,4 +1,20 @@
+# Arogya Mitra AI - Healthcare AI Assistant
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+## 🎥 Demo Video
+
+Watch our application in action:
+
+[![Demo Video](https://img.youtube.com/vi/GS0ia4vj7R0/maxresdefault.jpg)](https://www.youtube.com/watch?v=GS0ia4vj7R0)
+
+[Watch Full Demo on YouTube](https://www.youtube.com/watch?v=GS0ia4vj7R0)
+
+## 🚀 Live Application
+
+The application is deployed and live at:
+
+**[https://arogya-mitra-ai-drab.vercel.app/](https://arogya-mitra-ai-drab.vercel.app/)**
 
 ## Getting Started
 
