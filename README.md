@@ -234,17 +234,8 @@ The application is deployed on **Vercel** and can be accessed at:
 - [Tailwind CSS](https://tailwindcss.com/docs)
 - [Shadcn/ui Components](https://ui.shadcn.com/)
 
----
 
-## 👥 Team & Contributors
 
-See [developers page](/developers) for information about the development team.
-
----
-
-## 📝 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
 
 ---
 
@@ -259,7 +250,7 @@ For issues, suggestions, or feedback, please open an issue on GitHub or contact 
 - Built with [Next.js](https://nextjs.org/)
 - UI components from [Shadcn/ui](https://ui.shadcn.com/)
 - Deployed on [Vercel](https://vercel.com/)
-- AI powered by OpenAI
+- AI powered by openrouter api endpoints
 
 ---
 
